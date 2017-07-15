@@ -1,20 +1,31 @@
 <template>
   <div class="tab">
-    <ul class="tab-bar" :style="{width:tabbarWidth}">
-      <div class="tab-indicator" :style="{left: indicatorLeft}"></div>
-      <li class="tab-front" v-for="(item, index) in choosenTabs" :key="index" @click="forwardTo(index, $event)" :style="{width:frontTabWidth}">{{item.name}}</li>
-      <div class="tab-more" @click="toggleFullpage(true)"></div>
-    </ul>
+    <div class="tab-container">
+      <ul class="tab-bar" :style="{width:tabbarWidth}">
+        <div class="tab-indicator" :style="{left: indicatorLeft}"></div>
+        <li class="tab-front" v-for="(item, index) in choosenTabs" :key="index" @click="forwardTo(index, $event)" :style="{width:frontTabWidth}">{{item.name}}</li>
+        <div class="tab-more" @click="toggleFullpage(true)"></div>
+      </ul>
+    </div>
     <div class="fullpage" :class="{show: fullpageshow}">
       <div class="fullpage-close" @click="toggleFullpage(false)"></div>
       <div class="tab-choosen">
         <p class="fullpage-title">我的分类</p>
-        <ul class="tab-list">
-          <li class="tab-option" v-for="(item, index) in choosenTabs" :key="item" :class="{defaultTab: item.default}">
+        <transition-group name="flip-list" class="tab-list">
+          <li class="tab-option" 
+            v-for="(item, index) in choosenTabs" :key="item" :itemindex="index"
+            :class="{defaultTab: item.default}" 
+            @touchstart.stop.prevent="tabTouchstart(index, $event)" 
+            @touchmove.stop.prevent="tabTouchmove($event)"
+            @touchend.stop.prevent="tabTouchend(index, $event)">
             {{item.name}}
             <div :class="{tabDelete: !item.default}" @click="deleteTab(index)"></div>
           </li>
-        </ul>
+        </transition-group>
+        <div class="tab-option virtual-tab" v-if="virtual.show"
+          :style="{left: virtual.x, top: virtual.y}">
+          {{choosenTabs[virtual.index].name}}
+        </div>
       </div>
       <div class="tab-recommend">
         <p class="fullpage-title">推荐分类</p>
@@ -23,7 +34,7 @@
         </ul>
       </div>
     </div>
-    <div class="content" :style="{width: contentWidth}">
+    <div class="content" :style="{width: contentWidth}" @touchstart.stop="touchstart($event)" @touchmove.stop="touchmove($event)" @touchend.stop="touchend($event)">
       <div class="page" v-for="(item, index) in choosenTabs" :key="index" :style="{width: pageWidth}">{{item.name}}</div>
     </div>
   </div>
@@ -40,8 +51,16 @@ export default {
       startX: 0,
       curX: 0,
       scrollLen: 0,
+      hoverIndex: -1,
       verticalScroll: false,
       fullpageshow: false,
+      virtualIndex: 0,
+      virtual: {
+        index: 0,
+        show: false,
+        x: 0,
+        y: 0
+      },
       choosenTabs: [{index: 0, name: '精选', default: true}, {index: 1, name: '女装', default: false}, {index: 1, name: '家居', default: false}, {index: 1, name: '数码', default: false}, {index: 1, name: '母婴', default: false}, {index: 1, name: '家电', default: false}],
       recommendTabs: [{index: 1, name: '9块9', default: false}, {index: 1, name: '美妆', default: false}, {index: 1, name: '配饰', default: false}, {index: 1, name: '绅士', default: false}, {index: 1, name: '家装', default: false}, {index: 1, name: '运动', default: false}]
     }
@@ -69,6 +88,7 @@ export default {
     },
     deleteTab: function (index) {
       if (this.choosenTabs[index].default) return
+      if (index === this.curPage) this.forwardTo(0)
       this.recommendTabs = this.recommendTabs.concat(this.choosenTabs.splice(index, 1))
     },
     addTab: function (index) {
@@ -110,13 +130,42 @@ export default {
         var content = document.querySelector('.content')
         content.style.transform = 'translateX(' + (-this.curPage * document.body.clientWidth) + 'px)'
       }
+    },
+    drag: function (index, $event) {
+      $event.dataTransfer.setData('Text', index)
+    },
+    tabTouchstart: function (index, $event) {
+      if (this.choosenTabs[index].default) {
+        return
+      }
+      this.virtual.show = true
+      this.virtual.x = $event.changedTouches[0].pageX + 'px'
+      this.virtual.y = $event.changedTouches[0].pageY + 'px'
+      this.virtual.index = index
+    },
+    tabTouchmove: function ($event) {
+      let curMouseOn = document.elementsFromPoint($event.changedTouches[0].clientX, $event.changedTouches[0].clientY)[0]
+      if (curMouseOn !== null && curMouseOn.hasAttribute('itemindex')) {
+        let index = curMouseOn.getAttribute('itemindex')
+        if (index !== this.hoverIndex) {
+          this.hoverIndex = index
+        }
+      } else {
+        this.hoverIndex = -1  // 如果移到了标签外面就置为-1
+      }
+      this.virtual.x = $event.changedTouches[0].pageX + 'px'
+      this.virtual.y = $event.changedTouches[0].pageY + 'px'
+    },
+    tabTouchend: function (index, e) {
+      this.virtual.show = false
+      if (this.hoverIndex === -1) return  // hoverIndex === -1 即不会移动。
+      if (index !== this.hoverIndex) {
+        if (!this.choosenTabs[this.hoverIndex].default && !this.choosenTabs[index].default) { // 只有要插入位置的标签不是默认的才可以
+          this.choosenTabs.splice(this.hoverIndex, 0, this.choosenTabs.splice(index, 1)[0])
+        }
+      }
+      this.hoverIndex = -1  // 最后要把hoverIndex重置为-1，否则下次不用拖动，会一点就换
     }
-  },
-  mounted () {
-    var content = document.querySelector('.content')
-    content.addEventListener('touchend', this.touchend)
-    content.addEventListener('touchmove', this.touchmove)
-    content.addEventListener('touchstart', this.touchstart)
   }
 }
 </script>
@@ -146,9 +195,13 @@ $tabbarHeight: 2rem;
 
 .tab {
   background-color: white;
-  width: calc(100% - 2rem);
-  overflow: scroll;
   
+  .tab-container {
+    position: absolute;
+    width: calc(100% - 2rem);
+    overflow: scroll;
+  }
+
   .tab-bar {
     position: relative;
     width: $frontTabNum * 20%;
@@ -186,7 +239,7 @@ $tabbarHeight: 2rem;
         right: $margin;
         width: $tabbarHeight - 2 * $margin;
         height: $tabbarHeight - 2 * $margin;
-        background-image: url(../assets/tabmore.png);
+        background-image: url(./assets/tabmore.png);
         background-size: contain;
         background-repeat: no-repeat;
       }
@@ -217,7 +270,7 @@ $tabbarHeight: 2rem;
       right: 0 + $margin;
       width: 3rem - 2 * $margin;
       height: 3rem - 2 * $margin;
-      background-image: url('../assets/close.png');
+      background-image: url('./assets/close.png');
       background-size: contain;
       background-repeat: no-repeat;
     }
@@ -232,13 +285,19 @@ $tabbarHeight: 2rem;
         right: -0.6rem;
         width: 1.2rem;
         height: 1.2rem;
-        background-image: url(../assets/delete.png);
+        background-image: url(./assets/delete.png);
         background-size: contain;
         background-repeat: no-repeat;
       }
 
       .defaultTab {
         color: gray;
+      }
+
+      .virtual-tab {
+        position: fixed;
+        opacity: 0.5;
+        transform: translateX(-50%) translateY(-50%);
       }
     }
     .tab-recommend {
@@ -256,6 +315,10 @@ $tabbarHeight: 2rem;
       border-radius: 0.5rem;
       border: 1px solid #E2E2E2;
       background-color: white;
+    }
+
+    .flip-list-move {
+      transition: 0.2s;
     }
   }
 

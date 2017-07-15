@@ -75,7 +75,7 @@ $isize: 2rem;
   top: $timeMargin + $barMargin + $scanmargin;
   width: $scansize - 2 * $scanmargin;
   height: $scansize - 2 * $scanmargin;
-  background-image: url(../assets/qscan.png);
+  background-image: url(./assets/qscan.png);
   background-size: contain;
   background-repeat: no-repeat;
 }
@@ -96,7 +96,7 @@ $isize: 2rem;
     top: $imargin;
     width: $isize - 2 * $imargin;
     height: $isize - 2 * $imargin;
-    background-image: url(../assets/searchicon.png);
+    background-image: url(./assets/searchicon.png);
     background-size: contain;
   }
 
