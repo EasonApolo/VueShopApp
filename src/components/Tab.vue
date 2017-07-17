@@ -1,5 +1,5 @@
 <template>
-  <div class="tab">
+  <div class="tab" :id="cpntId">
     <div class="tab-container">
       <ul class="tab-bar" :style="{width:tabbarWidth}">
         <div class="tab-indicator" :style="{left: indicatorLeft}"></div>
@@ -19,7 +19,7 @@
             @touchmove.stop.prevent="tabTouchmove($event)"
             @touchend.stop.prevent="tabTouchend(index, $event)">
             {{item.name}}
-            <div :class="{tabDelete: !item.default}" @click="deleteTab(index)"></div>
+            <div :class="{tabDelete: !item.default}" @touchstart.stop="deleteTab(index)"></div>
           </li>
         </transition-group>
         <div class="tab-option virtual-tab" v-if="virtual.show"
@@ -34,24 +34,29 @@
         </ul>
       </div>
     </div>
-    <div class="content" :style="{width: contentWidth}" @touchstart.stop="touchstart($event)" @touchmove.stop="touchmove($event)" @touchend.stop="touchend($event)">
-      <div class="page" v-for="(item, index) in choosenTabs" :key="index" :style="{width: pageWidth}">{{item.name}}</div>
+    <div class="content" :style="{width: contentWidth}"
+      @touchstart.stop="touchstart($event)"
+      @touchmove.stop="touchmove($event)"
+      @touchend.stop="touchend($event)">
+      <div class="page" v-for="(item, index) in choosenTabs"
+        :is="item.component" :cpntId="item.cpntId" :key="index" :style="{width: pageWidth}">
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Advice from './Advice'
 
 export default {
   name: 'tab',
+  props: ['choosen', 'recommend', 'cpntId'],
   data () {
     return {
-      total: 6,
       curPage: 0,
       startX: 0,
       curX: 0,
       scrollLen: 0,
-      hoverIndex: -1,
       verticalScroll: false,
       fullpageshow: false,
       virtualIndex: 0,
@@ -61,9 +66,12 @@ export default {
         x: 0,
         y: 0
       },
-      choosenTabs: [{index: 0, name: '精选', default: true}, {index: 1, name: '女装', default: false}, {index: 1, name: '家居', default: false}, {index: 1, name: '数码', default: false}, {index: 1, name: '母婴', default: false}, {index: 1, name: '家电', default: false}],
-      recommendTabs: [{index: 1, name: '9块9', default: false}, {index: 1, name: '美妆', default: false}, {index: 1, name: '配饰', default: false}, {index: 1, name: '绅士', default: false}, {index: 1, name: '家装', default: false}, {index: 1, name: '运动', default: false}]
+      choosenTabs: this.choosen,
+      recommendTabs: this.recommend
     }
+  },
+  components: {
+    Advice
   },
   computed: {
     indicatorLeft: function () {
@@ -83,6 +91,12 @@ export default {
     }
   },
   methods: {
+    add: function (component, text) {
+      this.items.push({
+        'component': component,
+        'text': text
+      })
+    },
     toggleFullpage: function (bool) {
       this.fullpageshow = bool
     },
@@ -100,17 +114,21 @@ export default {
       this.verticalScroll = false
     },
     touchmove: function (e) {
-      if (this.verticalScroll) return
+      if (this.verticalScroll) {
+        return
+      } else {
+        e.preventDefault()
+      }
       if (Math.abs(e.touches[0].pageY - this.startY) > Math.abs(e.touches[0].pageX - this.startX)) {
         this.verticalScroll = true
         return
       }
       this.scrollLen = e.touches[0].pageX - this.startX
-      var content = document.querySelector('.content')
+      var content = document.querySelector('#' + this.cpntId + ' .content')
       content.style.transform = 'translateX(' + (this.curX + this.scrollLen) + 'px)'
     },
     touchend: function (e) {
-      var content = document.querySelector('.content')
+      var content = document.querySelector('#' + this.cpntId + ' .content')
       if (this.scrollLen > document.body.clientWidth / 2) {
         if (this.curPage > 0) {
           this.curPage--
@@ -127,7 +145,7 @@ export default {
     forwardTo: function (index) {
       if (index !== this.curPage) {
         this.curPage = index
-        var content = document.querySelector('.content')
+        var content = document.querySelector('#' + this.cpntId + ' .content')
         content.style.transform = 'translateX(' + (-this.curPage * document.body.clientWidth) + 'px)'
       }
     },
@@ -144,28 +162,31 @@ export default {
       this.virtual.index = index
     },
     tabTouchmove: function ($event) {
-      let curMouseOn = document.elementsFromPoint($event.changedTouches[0].clientX, $event.changedTouches[0].clientY)[0]
-      if (curMouseOn !== null && curMouseOn.hasAttribute('itemindex')) {
-        let index = curMouseOn.getAttribute('itemindex')
-        if (index !== this.hoverIndex) {
-          this.hoverIndex = index
-        }
-      } else {
-        this.hoverIndex = -1  // 如果移到了标签外面就置为-1
-      }
       this.virtual.x = $event.changedTouches[0].pageX + 'px'
       this.virtual.y = $event.changedTouches[0].pageY + 'px'
     },
-    tabTouchend: function (index, e) {
+    tabTouchend: function (index, $event) {
       this.virtual.show = false
-      if (this.hoverIndex === -1) return  // hoverIndex === -1 即不会移动。
-      if (index !== this.hoverIndex) {
-        if (!this.choosenTabs[this.hoverIndex].default && !this.choosenTabs[index].default) { // 只有要插入位置的标签不是默认的才可以
-          this.choosenTabs.splice(this.hoverIndex, 0, this.choosenTabs.splice(index, 1)[0])
+      this.$nextTick(function () {
+        let curMouseOn = document.elementFromPoint($event.changedTouches[0].clientX, $event.changedTouches[0].clientY)
+        if (curMouseOn !== null && curMouseOn.hasAttribute('itemindex')) {
+          let onIndex = curMouseOn.getAttribute('itemindex')
+          if (index !== onIndex) {
+            if (!this.choosenTabs[onIndex].default && !this.choosenTabs[index].default) { // 只有要插入位置的标签不是默认的才可以
+              this.choosenTabs.splice(onIndex, 0, this.choosenTabs.splice(index, 1)[0])
+            }
+          }
+        } else {
+          return
         }
-      }
-      this.hoverIndex = -1  // 最后要把hoverIndex重置为-1，否则下次不用拖动，会一点就换
+      })
     }
+  },
+  beforeCreate: function () {
+    //  避免循环引用，在beforeCreate钩子这里动态引入。
+    this.$options.components.Taobao = require('./Taobao.vue')
+    this.$options.components.Jindong = require('./Jindong.vue')
+    this.$options.components.Weipinghui = require('./Weipinghui.vue')
   }
 }
 </script>
@@ -194,6 +215,9 @@ $frontTabNum: 6;
 $tabbarHeight: 2rem;
 
 .tab {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   background-color: white;
   
   .tab-container {
@@ -208,7 +232,6 @@ $tabbarHeight: 2rem;
     min-width: 100%;
     height: 2rem;
     line-height: 2rem;
-    overflow: hidden;
     z-index: 1;
       
     .tab-indicator {
@@ -219,7 +242,7 @@ $tabbarHeight: 2rem;
       width: 3rem;
       height: 0.125rem;
       background-color: #FA5876;
-      transition: 0.2s
+      transition: 0.3s
     }
 
     $margin: 0.5rem; //通过此变量调节“+”的大小
@@ -327,15 +350,16 @@ $tabbarHeight: 2rem;
   }
 
   .content {
-    position: fixed;
-    top: 6rem;
+    position: absolute;
+    top: 2rem;
     left: 0;
-    bottom: 3rem;
+    bottom: 0;
     width: 200%;
-    transition: 0.2s;
+    transition: 0.3s;
     z-index: 0;
 
     .page {
+      position: relative;
       display: inline-block;
       width: 50%;
       height: 100%;

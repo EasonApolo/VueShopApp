@@ -1,5 +1,5 @@
 <template>
-  <div class="search">
+  <div class="search" @touchmove.stop.prevent>
     <div class="searchbar">
       <div class="qscan-entry">
       </div><div class="search-box">
@@ -15,8 +15,7 @@ export default {
   name: 'searchbar',
   data () {
     return {
-      recommend: '只要9块9毛9，爱疯7s带回家',
-      msg: 'Welcome to Your Vue.js App'
+      recommend: '只要9块9毛9，爱疯7s带回家'
     }
   }
 }

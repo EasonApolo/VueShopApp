@@ -1,5 +1,5 @@
 <template>
-  <div class="tabfooter">
+  <div class="tabfooter" @touchmove.prevent>
     <ul class="bottom">
       <li class="active">
         <router-link to="/index">Index</router-link>
@@ -17,7 +17,6 @@ export default {
   name: 'tabfooter',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
     }
   }
 }

@@ -1,7 +1,9 @@
 <template>
   <div class="index">
     <searchbar></searchbar>
-    <div class="main-tab"><tab></tab></div>
+    <div class="main-tab">
+      <tab :choosen="choosenTabs" :recommend="recommendTabs" :cpntId="mainCpntId"></tab>
+    </div>
   </div>
 </template>
 
@@ -13,10 +15,18 @@ export default {
   name: 'index',
   components: {
     Searchbar,
-    Tab
+    'tab': Tab
   },
   data () {
     return {
+      mainCpntId: 'l11',
+      choosenTabs: [
+        {index: 0, name: '淘宝', default: true, component: 'taobao', cpntId: 'l21'},
+        {index: 1, name: '京东', default: true, component: 'jindong', cpntId: 'l22'}
+      ],
+      recommendTabs: [
+        {index: 0, name: '唯品会', default: false, component: 'weipinghui', cpntId: 'l23'}
+      ]
     }
   }
 }
@@ -43,15 +53,19 @@ a {
 }
 
 .index {
-  margin-bottom: 3rem;
-  position: relative;
+  position: absolute;
+  top: 0;
+  bottom: 3rem;
+  left: 0;
+  width: 100%;
   overflow: hidden;
 }
 
 .main-tab {
-  position: fixed;
-  left: 0;
+  position: absolute;
   top: 4rem;
+  bottom: 0;
+  left: 0;
   width: 100%;
   z-index: 1;
 }
