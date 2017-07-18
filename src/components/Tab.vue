@@ -1,10 +1,13 @@
 <template>
   <div class="tab" :id="cpntId">
-    <div class="tab-container">
+    <div class="tab-more" @click="toggleFullpage(true)"></div>
+    <div class="tab-container" @touchmove.stop>
       <ul class="tab-bar" :style="{width:tabbarWidth}">
         <div class="tab-indicator" :style="{left: indicatorLeft}"></div>
-        <li class="tab-front" v-for="(item, index) in choosenTabs" :key="index" @click="forwardTo(index, $event)" :style="{width:frontTabWidth}">{{item.name}}</li>
-        <div class="tab-more" @click="toggleFullpage(true)"></div>
+        <li class="tab-front" v-for="(item, index) in choosenTabs" :key="index"
+          @click="forwardTo(index, $event)" :style="{width:frontTabWidth}">
+          {{item.name}}
+        </li>
       </ul>
     </div>
     <div class="fullpage" :class="{show: fullpageshow}">
@@ -129,11 +132,11 @@ export default {
     },
     touchend: function (e) {
       var content = document.querySelector('#' + this.cpntId + ' .content')
-      if (this.scrollLen > document.body.clientWidth / 2) {
+      if (this.scrollLen > document.body.clientWidth / 3) {
         if (this.curPage > 0) {
           this.curPage--
         }
-      } else if (this.scrollLen < -(document.body.clientWidth / 2)) {
+      } else if (this.scrollLen < -(document.body.clientWidth / 3)) {
         if (this.curPage < this.choosenTabs.length - 1) {
           this.curPage++
         }
@@ -148,9 +151,6 @@ export default {
         var content = document.querySelector('#' + this.cpntId + ' .content')
         content.style.transform = 'translateX(' + (-this.curPage * document.body.clientWidth) + 'px)'
       }
-    },
-    drag: function (index, $event) {
-      $event.dataTransfer.setData('Text', index)
     },
     tabTouchstart: function (index, $event) {
       if (this.choosenTabs[index].default) {
@@ -219,7 +219,31 @@ $tabbarHeight: 2rem;
   width: 100%;
   height: 100%;
   background-color: white;
+  overflow: hidden;
   
+  $margin: 0.5rem; //通过此变量调节“+”的大小
+  .tab-more {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: $tabbarHeight;
+    height: $tabbarHeight;
+    background-color: white;
+    box-shadow: -0.75rem 0rem 0.75rem -0.125rem white;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: $margin;
+      right: $margin;
+      width: $tabbarHeight - 2 * $margin;
+      height: $tabbarHeight - 2 * $margin;
+      background-image: url(./assets/tabmore.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  }
+
   .tab-container {
     position: absolute;
     width: calc(100% - 2rem);
@@ -245,29 +269,6 @@ $tabbarHeight: 2rem;
       transition: 0.3s
     }
 
-    $margin: 0.5rem; //通过此变量调节“+”的大小
-    .tab-more {
-      position: fixed;
-      margin-top: -2rem;
-      right: 0;
-      width: $tabbarHeight;
-      height: $tabbarHeight;
-      background-color: white;
-      box-shadow: -0.75rem 0rem 0.75rem -0.125rem white;
-
-      &:before {
-        content: '';
-        position: absolute;
-        top: $margin;
-        right: $margin;
-        width: $tabbarHeight - 2 * $margin;
-        height: $tabbarHeight - 2 * $margin;
-        background-image: url(./assets/tabmore.png);
-        background-size: contain;
-        background-repeat: no-repeat;
-      }
-    }
-
     .tab-front {
       display: inline-block;
       width: 100% / $frontTabNum;
@@ -275,12 +276,11 @@ $tabbarHeight: 2rem;
   }
 
   .fullpage {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
     width: 100%;
+    height: 100%;
     background-color: #F2F2F2;
     transform: translateY(-100%);
     transition: 0.2s;
@@ -288,11 +288,11 @@ $tabbarHeight: 2rem;
 
     .fullpage-close {
       position: absolute;
-      $margin: 0.5rem;
+      $margin: 0.3rem;
       top: 1rem + $margin;
       right: 0 + $margin;
-      width: 3rem - 2 * $margin;
-      height: 3rem - 2 * $margin;
+      width: 2rem - 2 * $margin;
+      height: 2rem - 2 * $margin;
       background-image: url('./assets/close.png');
       background-size: contain;
       background-repeat: no-repeat;

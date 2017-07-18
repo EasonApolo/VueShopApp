@@ -1,5 +1,45 @@
 <template>
   <div class="advice">
+    awefwaef<br>
+    afwefawvz<br>
+    weteu4<br>
+    5y65u<br>
+    awefwaef<br>
+    afwefawvz<br>
+    weteu4<br>
+    5y65u<br>
+    awefwaef<br>
+    afwefawvz<br>
+    weteu4<br>
+    5y65u<br>
+    awefwaef<br>
+    afwefawvz<br>
+    weteu4<br>
+    5y65u<br>
+    awefwaef<br>
+    afwefawvz<br>
+    weteu4<br>
+    5y65u<br>
+    awefwaef<br>
+    afwefawvz<br>
+    weteu4<br>
+    5y65u<br>
+    awefwaef<br>
+    afwefawvz<br>
+    weteu4<br>
+    5y65u<br>
+    awefwaef<br>
+    afwefawvz<br>
+    weteu4<br>
+    5y65u<br>
+    awefwaef<br>
+    afwefawvz<br>
+    weteu4<br>
+    5y65u<br>
+    awefwaef<br>
+    afwefawvz<br>
+    weteu4<br>
+    5y65u<br>
       {{text}}
   </div>
 </template>
