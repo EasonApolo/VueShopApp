@@ -37,7 +37,7 @@
         </ul>
       </div>
     </div>
-    <div class="content" :style="{width: contentWidth, transform: contentTransform}"
+    <div class="content" :style="{width: contentWidth, left: contentTransform}"
       @touchstart.stop="touchstart($event)"
       @touchmove.stop="touchmove($event)"
       @touchend.stop="touchend($event)">
@@ -93,7 +93,7 @@ export default {
       return 100 / this.choosenTabs.length + '%'
     },
     contentTransform: function () {
-      return 'translateX(' + (this.curX + this.scrollLen) + 'px)'
+      return this.curX + this.scrollLen + 'px'
     }
   },
   methods: {
@@ -133,7 +133,6 @@ export default {
       this.scrollLen = this.scrollLen
     },
     touchend: function (e) {
-      var content = document.querySelector('#' + this.cpntId + ' .content')
       if (this.scrollLen > document.body.clientWidth / 4) {
         if (this.curPage > 0) {
           this.curPage--
@@ -145,13 +144,11 @@ export default {
       }
       this.scrollLen = 0
       this.curX = -this.curPage * document.body.clientWidth
-      content.style.transform = 'translateX(' + (-this.curPage * document.body.clientWidth) + 'px)'
     },
     forwardTo: function (index) {
       if (index !== this.curPage) {
         this.curPage = index
-        var content = document.querySelector('#' + this.cpntId + ' .content')
-        content.style.transform = 'translateX(' + (-this.curPage * document.body.clientWidth) + 'px)'
+        this.curX = -this.curPage * document.body.clientWidth
       }
     },
     tabTouchstart: function (index, $event) {
@@ -284,7 +281,7 @@ $tabbarHeight: 2rem;
     width: 100%;
     height: 100%;
     background-color: #F2F2F2;
-    transform: translateY(-100%);
+    top: -100%;
     transition: 0.2s;
     z-index: 2;
 
@@ -348,7 +345,7 @@ $tabbarHeight: 2rem;
   }
 
   .show {
-    transform: translateY(0);
+    top: 0;
   }
 
   .content {

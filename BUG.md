@@ -10,7 +10,7 @@
 3. [重要][定位]弹出的fullPage高度和位置不合适，由于“transform属性导致子元素fixed失效变为absolute（在Chrome下）”问题导致。
 4. [优化]tab栏滑动到头可以有一个提示。
 5. [优化]tab-indicator在要超出view的时候tab也能自动滑动过去。
-6. [重要][定位]virtual-tab也是fixed的，和3一样，位置有错。
+> 6. [重要][定位]virtual-tab也是fixed的，和3一样，位置有错。
 
 
 7.17
