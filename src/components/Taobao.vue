@@ -1,61 +1,23 @@
 <template>
   <div class="taobao">
-    awefijwoiefjaowiefjoaiw<br>
-    awefijwoiefjao<br>
-    awefwaef<br>
-    afwefawvz<br>
-    weteu4<br>
-    5y65u<br>
-    45uwqagsdvzrY4Y<br>
-    awefwaef<br>
-    afwefawvz<br>
-    weteu4<br>
-    5y65u<br>
-    awefwaef<br>
-    afwefawvz<br>
-    weteu4<br>
-    5y65u<br>
-    awefwaef<br>
-    afwefawvz<br>
-    weteu4<br>
-    5y65u<br>
-    awefwaef<br>
-    afwefawvz<br>
-    weteu4<br>
-    5y65u<br>
-    awefwaef<br>
-    afwefawvz<br>
-    weteu4<br>
-    5y65u<br>
-    43TQ344FVJVB<br>
-    awefwaef<br>
-    afwefawvz<br>
-    weteu4<br>
-    5y65u<br>
-    awefwaef<br>
-    afwefawvz<br>
-    weteu4<br>
-    5y65u<br>
-    awefwaef<br>
-    afwefawvz<br>
-    weteu4<br>
-    5y65u<br>
-    awefwaef<br>
-    afwefawvz<br>
-    weteu4<br>
-    5y65u<br>
+    <slider></slider>
+    <optionlink></optionlink>
     <tab :choosen="choosenTabs" :recommend="recommendTabs" :cpntId="cpntId"></tab>
   </div>
 </template>
 
 <script>
 import Tab from './Tab'
+import OptionLink from './OptionLink'
+import Slider from './Slider'
 
 export default {
   name: 'taobao',
   props: ['cpntId'],
   components: {
-    Tab
+    'tab': Tab,
+    'optionlink': OptionLink,
+    'slider': Slider
   },
   data () {
     return {

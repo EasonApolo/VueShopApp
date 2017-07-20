@@ -1,7 +1,7 @@
 <template>
   <div class="tab" :id="cpntId">
     <div class="tab-more" @click="toggleFullpage(true)"></div>
-    <div class="tab-container" @touchmove.stop>
+    <div class="tab-container">
       <ul class="tab-bar" :style="{width:tabbarWidth}">
         <div class="tab-indicator" :style="{left: indicatorLeft}"></div>
         <li class="tab-front" v-for="(item, index) in choosenTabs" :key="index"
@@ -37,7 +37,7 @@
         </ul>
       </div>
     </div>
-    <div class="content" :style="{width: contentWidth}"
+    <div class="content" :style="{width: contentWidth, transform: contentTransform}"
       @touchstart.stop="touchstart($event)"
       @touchmove.stop="touchmove($event)"
       @touchend.stop="touchend($event)">
@@ -91,6 +91,9 @@ export default {
     },
     pageWidth: function () {
       return 100 / this.choosenTabs.length + '%'
+    },
+    contentTransform: function () {
+      return 'translateX(' + (this.curX + this.scrollLen) + 'px)'
     }
   },
   methods: {
@@ -122,21 +125,20 @@ export default {
       } else {
         e.preventDefault()
       }
-      if (Math.abs(e.touches[0].pageY - this.startY) > Math.abs(e.touches[0].pageX - this.startX)) {
+      this.scrollLen = e.touches[0].pageX - this.startX
+      if (Math.abs(e.touches[0].pageY - this.startY) > Math.abs(this.scrollLen)) {
         this.verticalScroll = true
         return
       }
-      this.scrollLen = e.touches[0].pageX - this.startX
-      var content = document.querySelector('#' + this.cpntId + ' .content')
-      content.style.transform = 'translateX(' + (this.curX + this.scrollLen) + 'px)'
+      this.scrollLen = this.scrollLen
     },
     touchend: function (e) {
       var content = document.querySelector('#' + this.cpntId + ' .content')
-      if (this.scrollLen > document.body.clientWidth / 3) {
+      if (this.scrollLen > document.body.clientWidth / 4) {
         if (this.curPage > 0) {
           this.curPage--
         }
-      } else if (this.scrollLen < -(document.body.clientWidth / 3)) {
+      } else if (this.scrollLen < -(document.body.clientWidth / 4)) {
         if (this.curPage < this.choosenTabs.length - 1) {
           this.curPage++
         }
