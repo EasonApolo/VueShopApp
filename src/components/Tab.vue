@@ -37,12 +37,12 @@
         </ul>
       </div>
     </div>
-    <div class="content" :style="{width: contentWidth, left: contentTransform}"
-      @touchstart.stop="touchstart($event)"
-      @touchmove.stop="touchmove($event)"
-      @touchend.stop="touchend($event)">
+    <div class="content" :style="{width: contentWidth, left: contentTransform}" :class="{trans:untouching}">
       <div class="page" v-for="(item, index) in choosenTabs"
-        :is="item.component" :cpntId="item.cpntId" :key="index" :style="{width: pageWidth}">
+        :is="item.component" :cpntId="item.cpntId" :key="index" :style="{width: pageWidth}"
+        @touchstart="touchstart($event)"
+        @touchmove="touchmove($event)"
+        @touchend="touchend($event)">
       </div>
     </div>
   </div>
@@ -69,6 +69,8 @@ export default {
         x: 0,
         y: 0
       },
+      untouching: true,
+      firstTouchmove: false,
       choosenTabs: this.choosen,
       recommendTabs: this.recommend
     }
@@ -97,6 +99,10 @@ export default {
     }
   },
   methods: {
+    logscroll: function ($event) {
+      let a = document.querySelector('.taobao')
+      console.log('scroll left:  ' + a.scrollTop + 'px')
+    },
     add: function (component, text) {
       this.items.push({
         'component': component,
@@ -118,19 +124,24 @@ export default {
       this.startX = e.touches[0].pageX
       this.startY = e.touches[0].pageY
       this.verticalScroll = false
+      this.untouching = false
+      this.firstTouchmove = true
     },
     touchmove: function (e) {
+      let scrollX = e.touches[0].pageX - this.startX
+      if (this.firstTouchmove) {
+        this.firstTouchmove = false
+        if (Math.abs(e.touches[0].pageY - this.startY) > Math.abs(scrollX)) {
+          this.verticalScroll = true
+          return
+        }
+      }
       if (this.verticalScroll) {
         return
       } else {
+        this.scrollLen = scrollX
         e.preventDefault()
       }
-      this.scrollLen = e.touches[0].pageX - this.startX
-      if (Math.abs(e.touches[0].pageY - this.startY) > Math.abs(this.scrollLen)) {
-        this.verticalScroll = true
-        return
-      }
-      this.scrollLen = this.scrollLen
     },
     touchend: function (e) {
       if (this.scrollLen > document.body.clientWidth / 4) {
@@ -142,6 +153,7 @@ export default {
           this.curPage++
         }
       }
+      this.untouching = true
       this.scrollLen = 0
       this.curX = -this.curPage * document.body.clientWidth
     },
@@ -348,13 +360,16 @@ $tabbarHeight: 2rem;
     top: 0;
   }
 
+  .trans {
+    transition: 0.3s;
+  }
+
   .content {
     position: absolute;
     top: 2rem;
     left: 0;
     bottom: 0;
     width: 200%;
-    transition: 0.3s;
     z-index: 0;
 
     .page {

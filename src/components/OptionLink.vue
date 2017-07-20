@@ -49,6 +49,7 @@ a {
   display: -webkit-flex;
   flex-wrap: wrap;
   padding-bottom: 1px;
+  overflow: hidden;
 }
 
 .ol-item {
