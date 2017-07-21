@@ -1,8 +1,40 @@
 <template>
   <div class="taobao">
-    <slider></slider>
-    <optionlink></optionlink>
-    <tab :choosen="choosenTabs" :recommend="recommendTabs" :cpntId="cpntId"></tab>
+    <!-- <slider></slider>
+    <optionlink></optionlink> -->
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    aefawef<br>
+    <!-- <tab :choosen="choosenTabs" :recommend="recommendTabs" :cpntId="cpntId" :scrollable="sonScrollable"></tab> -->
   </div>
 </template>
 
@@ -13,7 +45,7 @@ import Slider from './Slider'
 
 export default {
   name: 'taobao',
-  props: ['cpntId'],
+  props: ['cpntId', 'sonScrollable'],
   components: {
     'tab': Tab,
     'optionlink': OptionLink,

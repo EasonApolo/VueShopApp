@@ -16,10 +16,15 @@ export default {
 }
 </script>
 
-<style>
+<style lang='scss'>
 html, body {
   overflow: hidden;
 }
+
+body * {
+  max-height: 999999px;   // overflow在hidden和scroll切换的时候字体会自动改变，可以用这个方法解决.
+}
+
 body {
   margin: 0;
   position: fixed;
@@ -28,7 +33,7 @@ body {
   width: 100%;
   height: 100%;
 }
-a,img,button,input,textarea {
+a, img, button, input, textarea, div, li {
   -webkit-tap-highlight-color:rgba(255,255,255,0);
 }
 #app {

@@ -38,11 +38,11 @@
       </div>
     </div>
     <div class="content" :style="{width: contentWidth, left: contentTransform}" :class="{trans:untouching}">
-      <div class="page" v-for="(item, index) in choosenTabs"
-        :is="item.component" :cpntId="item.cpntId" :key="index" :style="{width: pageWidth}"
+      <div class="page" v-for="(item, index) in choosenTabs" :key="index" :style="{width: pageWidth}" :class="{scrollable:scrollable}"
         @touchstart="touchstart($event)"
         @touchmove="touchmove($event)"
         @touchend="touchend($event)">
+        <div class="pagewrapper" :is="item.component" :cpntId="item.cpntId" :sonScrollable="sonScrollable"></div>
       </div>
     </div>
   </div>
@@ -53,7 +53,7 @@ import Advice from './Advice'
 
 export default {
   name: 'tab',
-  props: ['choosen', 'recommend', 'cpntId'],
+  props: {'choosen': {}, 'recommend': {}, 'cpntId': {}, 'scrollable': {type: Boolean, default: true}},
   data () {
     return {
       curPage: 0,
@@ -72,7 +72,8 @@ export default {
       untouching: true,
       firstTouchmove: false,
       choosenTabs: this.choosen,
-      recommendTabs: this.recommend
+      recommendTabs: this.recommend,
+      sonScrollable: false
     }
   },
   components: {
@@ -99,10 +100,6 @@ export default {
     }
   },
   methods: {
-    logscroll: function ($event) {
-      let a = document.querySelector('.taobao')
-      console.log('scroll left:  ' + a.scrollTop + 'px')
-    },
     add: function (component, text) {
       this.items.push({
         'component': component,
@@ -128,6 +125,14 @@ export default {
       this.firstTouchmove = true
     },
     touchmove: function (e) {
+      // 通过父tab滑动的距离设置子tab是否可以滑动
+      let top = e.currentTarget.scrollTop
+      let sonH = document.querySelector('.pagewrapper').offsetHeight
+      if (top >= sonH) {
+        this.sonScrollable = true
+      } else if (top <= sonH) {
+        this.sonScrollable = false
+      }
       let scrollX = e.touches[0].pageX - this.startX
       if (this.firstTouchmove) {
         this.firstTouchmove = false
@@ -136,11 +141,11 @@ export default {
           return
         }
       }
-      if (this.verticalScroll) {
-        return
-      } else {
+      console.log(this.verticalScroll, this.scrollable, this.sonScrollable)
+      if (!this.verticalScroll) {
         this.scrollLen = scrollX
         e.preventDefault()
+        e.stopPropagation()
       }
     },
     touchend: function (e) {
@@ -287,7 +292,7 @@ $tabbarHeight: 2rem;
   }
 
   .fullpage {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -364,13 +369,17 @@ $tabbarHeight: 2rem;
     transition: 0.3s;
   }
 
+  .scrollable {
+    overflow: scroll !important;
+  }
+
   .content {
     position: absolute;
     top: 2rem;
     left: 0;
     bottom: 0;
     width: 200%;
-    z-index: 0;
+    z-index: 1;
 
     .page {
       position: relative;
@@ -378,7 +387,11 @@ $tabbarHeight: 2rem;
       width: 50%;
       height: 100%;
       vertical-align:top;
-      overflow: scroll;
+      overflow: hidden;
+
+      .pageWrapper {
+        position: relative;
+      }
     }
   }
 }
