@@ -2,7 +2,7 @@
   <div class="tab" :id="cpntId">
     <div class="tab-more" @click="toggleFullpage(true)"></div>
     <div class="tab-container">
-      <ul class="tab-bar" :style="{width:tabbarWidth}">
+      <ul class="tab-bar" :style="{width:tabbarWidth}" @touchmove.stop>
         <div class="tab-indicator" :style="{left: indicatorLeft}"></div>
         <li class="tab-front" v-for="(item, index) in choosenTabs" :key="index"
           @click="forwardTo(index, $event)" :style="{width:frontTabWidth}">
@@ -127,6 +127,7 @@ export default {
     touchmove: function (e) {
       // 通过父tab滑动的距离设置子tab是否可以滑动
       let top = e.currentTarget.scrollTop
+      // console.log(e.currentTarget, this.scrollable, this.sonScrollable)
       let sonH = document.querySelector('.pagewrapper').offsetHeight
       if (top >= sonH) {
         this.sonScrollable = true
@@ -141,10 +142,11 @@ export default {
           return
         }
       }
-      console.log(this.verticalScroll, this.scrollable, this.sonScrollable)
       if (!this.verticalScroll) {
         this.scrollLen = scrollX
         e.preventDefault()
+      }
+      if (this.cpntId === 'l11') {
         e.stopPropagation()
       }
     },

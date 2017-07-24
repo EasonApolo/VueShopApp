@@ -1,40 +1,8 @@
 <template>
   <div class="taobao">
-    <!-- <slider></slider>
-    <optionlink></optionlink> -->
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    aefawef<br>
-    <!-- <tab :choosen="choosenTabs" :recommend="recommendTabs" :cpntId="cpntId" :scrollable="sonScrollable"></tab> -->
+    <slider></slider>
+    <optionlink></optionlink> 
+    <tab :choosen="choosenTabs" :recommend="recommendTabs" :cpntId="cpntId" :scrollable="sonScrollable"></tab> 
   </div>
 </template>
 
