@@ -1,8 +1,10 @@
 <template>
   <div class="tab" :id="cpntId">
     <div class="tab-more" @click="toggleFullpage(true)"></div>
-    <div class="tab-container">
-      <ul class="tab-bar" :style="{width:tabbarWidth}" @touchmove.stop>
+    <div class="tab-container"
+      @touchstart="tabbarTouchstart($event)"
+      @touchmove="tabbarTouchmove($event)">
+      <ul class="tab-bar" :style="{width:tabbarWidth}">
         <div class="tab-indicator" :style="{left: indicatorLeft}"></div>
         <li class="tab-front" v-for="(item, index) in choosenTabs" :key="index"
           @click="forwardTo(index, $event)" :style="{width:frontTabWidth}">
@@ -73,7 +75,13 @@ export default {
       firstTouchmove: false,
       choosenTabs: this.choosen,
       recommendTabs: this.recommend,
-      sonScrollable: false
+      sonScrollable: false,
+      tabbar: {
+        x: 0,
+        y: 0,
+        firstTouchmove: false,
+        isVertical: true
+      }
     }
   },
   components: {
@@ -127,8 +135,7 @@ export default {
     touchmove: function (e) {
       // 通过父tab滑动的距离设置子tab是否可以滑动
       let top = e.currentTarget.scrollTop
-      // console.log(e.currentTarget, this.scrollable, this.sonScrollable)
-      let sonH = document.querySelector('.pagewrapper').offsetHeight
+      let sonH = e.currentTarget.firstChild.offsetHeight
       if (top >= sonH) {
         this.sonScrollable = true
       } else if (top <= sonH) {
@@ -145,6 +152,7 @@ export default {
       if (!this.verticalScroll) {
         this.scrollLen = scrollX
         e.preventDefault()
+        e.stopPropagation()
       }
       if (this.cpntId === 'l11') {
         e.stopPropagation()
@@ -198,6 +206,26 @@ export default {
           return
         }
       })
+    },
+    tabbarTouchstart: function ($event) {
+      let bar = this.tabbar
+      bar.x = $event.touches[0].pageX
+      bar.y = $event.touches[0].pageY
+      bar.firstTouchmove = true
+      bar.isVertical = true
+    },
+    tabbarTouchmove: function ($event) {
+      let abs = Math.abs
+      let bar = this.tabbar
+      if (bar.firstTouchmove) {
+        if (abs($event.touches[0].pageX - bar.x) > abs($event.touches[0].pageY - bar.y)) {
+          bar.isVertical = false
+        }
+        bar.firstTouchmove = false
+      }
+      if (!bar.isVertical) {
+        $event.stopPropagation()
+      }
     }
   },
   beforeCreate: function () {
@@ -274,7 +302,6 @@ $tabbarHeight: 2rem;
     min-width: 100%;
     height: 2rem;
     line-height: 2rem;
-    z-index: 1;
       
     .tab-indicator {
       position: absolute;
@@ -302,7 +329,7 @@ $tabbarHeight: 2rem;
     background-color: #F2F2F2;
     top: -100%;
     transition: 0.2s;
-    z-index: 2;
+    z-index: 999;
 
     .fullpage-close {
       position: absolute;
@@ -381,7 +408,6 @@ $tabbarHeight: 2rem;
     left: 0;
     bottom: 0;
     width: 200%;
-    z-index: 1;
 
     .page {
       position: relative;
@@ -390,6 +416,7 @@ $tabbarHeight: 2rem;
       height: 100%;
       vertical-align:top;
       overflow: hidden;
+      background-color: #EEEEEE;
 
       .pageWrapper {
         position: relative;

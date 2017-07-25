@@ -51,7 +51,6 @@ $barMargin: 0.5rem; //搜索框顶距
   top: 0;
   width: 100%;
   height: 4rem;
-  z-index: 1;
 }
 .searchbar {
   position: relative;

@@ -1,7 +1,10 @@
+
+
 7.24
 
 1.  [修复]7.21(1)。
     判断是tab.page绑定的touchmove没有stop。没有stop的touchmove可能在上层节点（然而并未找到）被preventDefault了导致不能滑动。而如果单纯的stop又会导致子tab的事件不能传递到父tab。因此最后touchmove中只有id=父tab才会被stop。
+2.  [新增]shop和item的100%宽度的条目。
 
 
 7.21

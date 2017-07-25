@@ -50,6 +50,7 @@ a {
   flex-wrap: wrap;
   padding-bottom: 1px;
   overflow: hidden;
+  background-color: #EEEEEE;
 }
 
 .ol-item {

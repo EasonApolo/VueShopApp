@@ -1,7 +1,7 @@
 <template>
   <div class="taobao">
     <slider></slider>
-    <optionlink></optionlink> 
+    <optionlink></optionlink>
     <tab :choosen="choosenTabs" :recommend="recommendTabs" :cpntId="cpntId" :scrollable="sonScrollable"></tab> 
   </div>
 </template>
