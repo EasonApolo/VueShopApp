@@ -1,15 +1,16 @@
 <template>
   <div class="optionlink">
     <ul class="ol-box">
-      <li class="ol-item"><div class="ol-bg" :style="{backgroundImage: 'url(' +bg + ')'}"></div></li>
-      <li class="ol-item"><div class="ol-bg" :style="{backgroundImage: 'url(' +bg + ')'}"></div></li>
-      <li class="ol-item">awefae</li>
-      <li class="ol-item">afwefwefwaef</li>
+      <li class="ol-item"><div class="ol-bg" :style="{backgroundImage: 'url(' +bg1 + ')'}"></div></li>
+      <li class="ol-item"><div class="ol-bg" :style="{backgroundImage: 'url(' +bg2 + ')'}"></div></li>
+      <li class="ol-item"><div class="ol-bg" :style="{backgroundImage: 'url(' +bg3 + ')'}"></div></li>
+      <li class="ol-item"><div class="ol-bg" :style="{backgroundImage: 'url(' +bg4 + ')'}"></div></li>
     </ul>
   </div>
 </template>
 
 <script>
+import Dummy from './Dummy'
 
 export default {
   name: 'optionlink',
@@ -18,7 +19,10 @@ export default {
   },
   data () {
     return {
-      bg: require('./assets/S.png')
+      bg1: Dummy.prototype.get(),
+      bg2: Dummy.prototype.get(),
+      bg3: Dummy.prototype.get(),
+      bg4: Dummy.prototype.get()
     }
   }
 }

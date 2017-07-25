@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import Dummy from './Dummy'
+
 export default {
   name: 'slider',
   props: ['cpntId'],
@@ -23,11 +25,13 @@ export default {
         direction: 'horizontal',
         loop: true,
         pagination: '.swiper-pagination',
-        paginationClickable: true
+        paginationClickable: true,
+        autoplay: 5000,
+        speed: 500
       },
       list: [
-        {url: require('../../static/S.png')},
-        {url: require('../../static/S.png')},
+        {url: Dummy.prototype.get()},
+        {url: Dummy.prototype.get()},
         {url: require('../../static/S.png')}
       ]
     }

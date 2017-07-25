@@ -9,6 +9,7 @@
 <script>
 import Item from './Item'
 import Shop from './Shop'
+import Dummy from './Dummy'
 
 export default {
   name: 'listview',
@@ -20,11 +21,11 @@ export default {
   data () {
     return {
       listData: [
-        {type: 'shop', name: '店铺名长长长长长长长长长长长长', imgUrl: require('./assets/S.png'), assess: [3, 5, 4.4], shopUrl: 'dianpuURL'},
-        {type: 'shop', name: '店铺名长长', imgUrl: require('./assets/S.png'), assess: [3.5, 4.3, 2.1], shopUrl: 'dianpuURL'},
-        {type: 'shop', name: '水果手机专卖店', imgUrl: require('./assets/S.png'), assess: [5, 4.6, 5.9], shopUrl: 'dianpuURL'},
-        {type: 'item', name: '商品名长长长长长长长长长长长长', imgUrl: require('./assets/S.png'), price: 6.66, itemUrl: 'dianpuURL', volume: 5, discount: 10},
-        {type: 'item', name: '商品名长长', imgUrl: require('./assets/S.png'), price: 23.33, itemUrl: 'dianpuURL', volume: 780, discount: 10},
+        {type: 'shop', name: '店铺名长长长长长长长长长长长长', imgUrl: Dummy.prototype.get(), assess: [3, 5, 4.4], shopUrl: 'dianpuURL'},
+        {type: 'shop', name: '店铺名长长', imgUrl: Dummy.prototype.get(), assess: [3.5, 4.3, 2.1], shopUrl: 'dianpuURL'},
+        {type: 'shop', name: '水果手机专卖店', imgUrl: Dummy.prototype.get(), assess: [5, 4.6, 3.9], shopUrl: 'dianpuURL'},
+        {type: 'item', name: '商品名长长长长长长长长长长长长', imgUrl: Dummy.prototype.get(), price: 6.66, itemUrl: 'dianpuURL', volume: 5, discount: 10},
+        {type: 'item', name: '商品名长长', imgUrl: Dummy.prototype.get(), price: 23.33, itemUrl: 'dianpuURL', volume: 780, discount: 10},
         {type: 'item', name: '商品名长', imgUrl: require('./assets/S.png'), price: 8088.00, itemUrl: 'dianpuURL', volume: 123102, discount: 10}
       ]
     }

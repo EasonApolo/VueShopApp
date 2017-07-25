@@ -5,9 +5,9 @@
       <div class="shop-info">
         <div class="shop-name">{{ownprop.name}}</div>
         <div class="shop-assess">
-          <div class="">宝贝描述<span></span><span>{{ownprop.assess[0]}}</span></div>
-          <div class="">卖家服务<span></span><span>{{ownprop.assess[1]}}</span></div>
-          <div class="">物流服务<span></span><span>{{ownprop.assess[2]}}</span></div>
+          <div class="shop-assess-row">宝贝描述<span class="shop-star" :style="{backgroundImage:'url('+backStarUrl+')'}"><span class="shop-star-front" :style="{width:(ownprop.assess[0]*20+'%'),backgroundImage:'url('+frontStarUrl+')'}"></span></span><span class="shop-value">{{ownprop.assess[0]}}</span></div>
+          <div class="shop-assess-row">卖家服务<span class="shop-star" :style="{backgroundImage:'url('+backStarUrl+')'}"><span class="shop-star-front" :style="{width:(ownprop.assess[1]*20+'%'),backgroundImage:'url('+frontStarUrl+')'}"></span></span><span class="shop-value">{{ownprop.assess[1]}}</span></div>
+          <div class="shop-assess-row">物流服务<span class="shop-star" :style="{backgroundImage:'url('+backStarUrl+')'}"><span class="shop-star-front" :style="{width:(ownprop.assess[2]*20+'%'),backgroundImage:'url('+frontStarUrl+')'}"></span></span><span class="shop-value">{{ownprop.assess[2]}}</span></div>
         </div>
       </div>
     </div>
@@ -23,6 +23,8 @@ export default {
   },
   data () {
     return {
+      frontStarUrl: require('./assets/frontstar.png'),
+      backStarUrl: require('./assets/backstar.png')
     }
   }
 }
@@ -78,9 +80,39 @@ a {
         color: #444;
       }
       .shop-assess {
+        display: inline-block;
         margin-top: 0.5rem;
         color: #666;
         font-size: 0.875rem;
+        line-height: 0.875rem;
+
+        .shop-assess-row {
+          margin-bottom: 0.5rem;
+
+          .shop-star {
+            $starH: 0.875rem;
+
+            display: inline-block;
+            position: relative;
+            margin-left: 2rem;
+            width: 5 * $starH;
+            height: $starH;
+            background-size: contain;
+            background-repeat: no-repeat;
+
+            .shop-star-front {
+              position: absolute;
+              left: 0;
+              top: 0;
+              height: 100%;
+              background-size: cover;
+              background-repeat: no-repeat;
+            }
+          }
+          .shop-value {
+            margin-left: 0.5rem;
+          }
+        }
       }
     }
   }
