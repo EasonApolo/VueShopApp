@@ -1,5 +1,5 @@
 7.24
-
+1. [重要][Slider]在修改了一些swiper的配置后，swiper的滑动没有stopPropagation了。
 
 
 7.21

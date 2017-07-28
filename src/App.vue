@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <keep-alive exclude="'detail'">
+      <router-view :key="$route.path"></router-view>
+    </keep-alive>
     <tabfooter></tabfooter>
   </div>
 </template>
@@ -48,5 +50,6 @@ a, img, button, input, textarea, div, li {
   text-align: center;
   color: #2c3e50;
   overflow: hidden;
+  z-index: 1;
 }
 </style>

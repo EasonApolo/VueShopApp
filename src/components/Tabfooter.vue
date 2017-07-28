@@ -13,11 +13,21 @@
 </template>
 
 <script>
+
 export default {
   name: 'tabfooter',
   data () {
     return {
     }
+  },
+  methods: {
+    pushToDetail: function (pprop) {
+      this.$router.push({name: 'detail', query: { iprop: pprop }})
+      console.log(pprop.name)
+    }
+  },
+  mounted () {
+    this.$root.eventHub.$on('pushToDetail', this.pushToDetail)
   }
 }
 </script>

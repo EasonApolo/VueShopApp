@@ -159,6 +159,25 @@ export default {
       }
     },
     touchend: function (e) {
+      function animate (time) {
+        requestAnimationFrame(animate)
+        TWEEN.update(time)
+      }
+      if (this.verticalScroll) {
+        let top = e.currentTarget.scrollTop
+        let sonH = e.currentTarget.firstChild.offsetHeight
+        if (top >= sonH - 80 && top < sonH) {
+          var TWEEN = require('@tweenjs/tween.js')
+          var tween = new TWEEN.Tween({x: e.currentTarget.scrollTop, y: e.currentTarget})
+          .to({x: sonH}, 200)
+          .onUpdate(function () {
+            this.y.scrollTop = this.x
+          })
+          tween.start()
+          requestAnimationFrame(animate)
+          this.sonScrollable = true
+        }
+      }
       if (this.scrollLen > document.body.clientWidth / 4) {
         if (this.curPage > 0) {
           this.curPage--
@@ -294,6 +313,7 @@ $tabbarHeight: 2rem;
     position: absolute;
     width: calc(100% - 2rem);
     overflow: scroll;
+    -webkit-overflow-scrolling : touch;
   }
 
   .tab-bar {
@@ -400,6 +420,7 @@ $tabbarHeight: 2rem;
 
   .scrollable {
     overflow: scroll !important;
+    -webkit-overflow-scrolling : touch;
   }
 
   .content {
@@ -417,6 +438,7 @@ $tabbarHeight: 2rem;
       vertical-align:top;
       overflow: hidden;
       background-color: #EEEEEE;
+      transition: 1s;
 
       .pageWrapper {
         position: relative;

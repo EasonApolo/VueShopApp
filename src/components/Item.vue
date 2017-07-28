@@ -1,6 +1,6 @@
 <template>
   <div class="item">
-    <div class="item-box">
+    <div class="item-box" @click="linktoItem">
       <img class="item-avt" :src="ownprop.imgUrl" />
       <div class="item-info">
         <div class="item-name">{{ownprop.name}}</div>
@@ -21,6 +21,11 @@ export default {
   },
   data () {
     return {
+    }
+  },
+  methods: {
+    linktoItem: function () {
+      this.$root.eventHub.$emit('pushToDetail', this.ownprop)
     }
   }
 }

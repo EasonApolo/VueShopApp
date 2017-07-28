@@ -1,6 +1,12 @@
 <template>
-  <div class="personal">
-
+  <div class="personal" @click="aaa">
+    fafawfefaw<br>
+    fafawfefaw<br>
+    fafawfefaw<br>
+    fafawfefaw<br>
+    fafawfefaw<br>
+    fafawfefaw<br>
+    fafawfefaw<br>
   </div>
 </template>
 
@@ -11,6 +17,12 @@ export default {
   data () {
     return {
 
+    }
+  },
+  methods: {
+    aaa: function () {
+      window.location.href = '../../static/a.html'
+      console.log(window.location.href)
     }
   }
 }
@@ -34,5 +46,10 @@ li {
 
 a {
   color: #42b983;
+}
+
+.personal {
+  height: 100%;
+  height: 100%;
 }
 </style>
