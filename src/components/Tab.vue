@@ -45,8 +45,9 @@
       <div class="page" v-for="(item, index) in choosenTabs" :key="index" :style="{width: pageWidth}" :class="{scrollable:scrollable}"
         @touchstart="touchstart($event)"
         @touchmove="touchmove($event)"
-        @touchend="touchend($event)">
-        <div class="pagewrapper" :is="item.component" :cpntId="item.cpntId" :sonScrollable="sonScrollable[index]" :sonScrollTop="sonScrollTop[index]" :msg="item.msg"></div>
+        @touchend="touchend($event)"
+        :id="'p'+cpntId+index">
+        <div class="pagewrapper" :is="item.component" :cpntId="item.cpntId" :sonScrollable="scrolls[index].sonScrollable" :sonScrollTop="scrolls[index].sonScrollTop" :msg="item.msg"></div>
       </div>
     </div>
   </div>
@@ -80,15 +81,21 @@ export default {
       firstTouchmove: false,
       choosenTabs: this.choosen,
       recommendTabs: this.recommend,
-      sonScrollable: [false, false],
-      sonScrollTop: [-1, -1],
       initScrollTop: 0,
       tabbar: {
         x: 0,
         y: 0,
         firstTouchmove: false,
         isVertical: true
-      }
+      },
+      scrolls:
+        Array.apply(null, Array(this.choosen.length)).map((item, i) => {
+          return {
+            sonScrollTop: -1,
+            sonScrollable: false,
+            pageScrollTop: 0
+          }
+        })
     }
   },
   components: {
@@ -134,9 +141,15 @@ export default {
       if (this.choosenTabs[index].default) return
       if (index === this.curPage) this.forwardTo(0)
       this.recommendTabs = this.recommendTabs.concat(this.choosenTabs.splice(index, 1))
+      this.scrolls.splice(index, 1)
     },
     addTab: function (index) {
       this.choosenTabs = this.choosenTabs.concat(this.recommendTabs.splice(index, 1))
+      this.scrolls.push({
+        sonScrollTop: -1,
+        sonScrollable: false,
+        pageScrollTop: 0
+      })
     },
     touchstart: function (e) {
       this.startX = e.touches[0].pageX
@@ -208,11 +221,20 @@ export default {
           if (index !== onIndex) {
             if (!this.choosenTabs[onIndex].default && !this.choosenTabs[index].default) { // 只有要插入位置的标签不是默认的才可以
               this.choosenTabs.splice(onIndex, 0, this.choosenTabs.splice(index, 1)[0])
+              this.scrolls.splice(onIndex, 0, this.scrolls.splice(index, 1)[0])
+              this.resetScrollTop(index, onIndex)
             }
           }
         } else {
           return
         }
+      })
+    },
+    resetScrollTop: function () {
+      Array.prototype.slice.apply(arguments).map(index => {
+        this.$nextTick(function () {
+          document.getElementById('p' + this.cpntId + index).scrollTop = this.scrolls[index].pageScrollTop
+        })
       })
     },
     tabbarTouchstart: function ($event) {
@@ -238,12 +260,9 @@ export default {
     scroll: function (e) {
       let top = e.target.scrollTop
       let hei = e.target.firstChild.offsetHeight
-      if (top >= hei) {
-        this.sonScrollable[this.curPage] = true
-      } else {
-        this.sonScrollable[this.curPage] = false
-      }
-      this.sonScrollTop[this.curPage] = hei - top
+      this.scrolls[this.curPage].sonScrollable = top >= hei
+      this.scrolls[this.curPage].sonScrollTop = hei - top
+      this.scrolls[this.curPage].pageScrollTop = top
     }
   },
   mounted: function () {

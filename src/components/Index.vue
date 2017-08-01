@@ -21,7 +21,7 @@ export default {
     return {
       mainCpntId: 'l11',
       choosenTabs: [
-        {index: 0, name: '淘宝', default: true, component: 'taobao', cpntId: 'l21', msg: 'xx'},
+        {index: 0, name: '淘宝', default: false, component: 'taobao', cpntId: 'l21', msg: 'xx'},
         {index: 1, name: '京东', default: false, component: 'jindong', cpntId: 'l22', msg: 'hh'}
       ],
       recommendTabs: [

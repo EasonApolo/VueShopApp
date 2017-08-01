@@ -1,3 +1,6 @@
+要本地存储的数据：
+1. 每个tab栏的choosenTabs的顺序。
+
 8.1
 
 1. [重构]添加了-webkit-overlow-scrolling: touch， 使滑动更为流畅。tab中，使用scroll代替touchmove，使滑动到临界点的事件可以被监听到。
@@ -9,6 +12,7 @@
     高度同样改为相对于自身的高度，需要把全局坐标减去顶栏高度，再减去子tab相对顶栏的高度（即父tab高度-父tab已滑动高度）。
     顶栏高度可以直接得到。
     而tab相对顶栏高度的变化，可以在父tab的scroll事件中监听，并为tab新增了一个sonScrollTop属性来向子tab（同样需要经过Taobao和Jindong组件）传值。其初始化放在mounted钩子中。
+5. [优化]将三个有关scroll的属性集中到了scrolls里，在交换父tab的标签后，scroll也会交换。子tab没有这项功能。
 
 7.24
 

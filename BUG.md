@@ -1,12 +1,14 @@
 8.1
 
 1. [重要][Tab]子tab在overflow:hidden变为scroll时会卡顿。
-> 2. [重要][Tab]sonScrollable/sonScrollTop是针对父tab的所有子tab来的。这是错误的。
-3. [重要][Tab]由8.1.2引发，在choosenTabs交换、增添时，sonScrollTop和sonScrollable数组的次序也应该交换。
+> 2. [重要][Tab]sonScrollable/sonScrollTop是针对父tab的所有子tab来的。这是错误的。 //  将这两个值改为数组存取，tab交换时要修改这两个数组。
+> 3. [重要][Tab]由8.1.2引发，在choosenTabs交换、增添时，sonScrollTop和sonScrollable数组的次序也应该交换。
+4. [重要][子Tab]判断是组件懒重用问题。由于引用相同的Listview，当choosenTabs交换时，虽然PageWrapper交换了，但ListView好像没有交换。
+5. [微调][Tab]为tab增加了一个msg属性作为测试，以后要移除。
 
 
 7.24
-1. [重要][Slider]在修改了一些swiper的配置后，swiper的滑动没有stopPropagation了。
+> 1. [重要][Slider]在修改了一些swiper的配置后，swiper的滑动没有stopPropagation了。
 
 
 7.21
@@ -15,8 +17,8 @@
 
 7.20
 
-1. [重要][滑动]tab栏在模拟机上不能上下拖动。
-2. [重要][状态栏]iOS11上，虽然状态栏不见了，但底栏也上移了
+> 1. [重要][滑动]tab栏在模拟机上不能上下拖动。   //  更换为-webkit-overflow-scroll: touch后可以滑动了
+> 2. [重要][状态栏]iOS11上，虽然状态栏不见了，但底栏也上移了   // 暂时移除了隐藏顶栏的代码
 > 3. [优化][OptionLink]左右可以由一点点的溢出。
 > 4. [优化][Tab.content]平移时会暂时去除transition
 > 5. [优化][Tab.content]滑动时，用flag在第一次touchmove时就判断方向，彻底解决了滑动方向判定可能有问题的bug，很暴力。
