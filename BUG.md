@@ -1,3 +1,10 @@
+8.1
+
+1. [重要][Tab]子tab在overflow:hidden变为scroll时会卡顿。
+> 2. [重要][Tab]sonScrollable/sonScrollTop是针对父tab的所有子tab来的。这是错误的。
+3. [重要][Tab]由8.1.2引发，在choosenTabs交换、增添时，sonScrollTop和sonScrollable数组的次序也应该交换。
+
+
 7.24
 1. [重要][Slider]在修改了一些swiper的配置后，swiper的滑动没有stopPropagation了。
 

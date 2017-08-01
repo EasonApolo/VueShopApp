@@ -1,19 +1,19 @@
 <template>
   <div class="tab" :id="cpntId">
+    <div class="tab-more" @click="toggleFullpage(true)"></div>
     <div class="tab-container"
       @touchstart="tabbarTouchstart($event)"
       @touchmove="tabbarTouchmove($event)">
       <ul class="tab-bar" :style="{width:tabbarWidth}">
-        <div class="tab-indicator" :style="{transform: indicatorLeft}"></div>
+        <div class="tab-indicator" :style="{left: indicatorLeft}"></div>
         <li class="tab-front" v-for="(item, index) in choosenTabs" :key="index"
           @click="forwardTo(index, $event)" :style="{width:frontTabWidth}">
           {{item.name}}
         </li>
       </ul>
     </div>
-    <div class="tab-more" @click="toggleFullpage(true)"></div>
     <transition name="slide-fade">
-      <div class="fullpage" v-if="fullpageshow" @touchmove.stop.prevent :id="'fp'+cpntId">
+      <div class="fullpage" v-if="fullpageshow">
         <div class="fullpage-close" @click="toggleFullpage(false)"></div>
         <div class="tab-choosen">
           <p class="fullpage-title">我的分类</p>
@@ -41,12 +41,12 @@
         </div>
       </div>
     </transition>
-    <div class="content" :style="{width: contentWidth, transform: contentTransform}" :class="{trans:untouching}">
+    <div class="content" :style="{width: contentWidth, left: contentTransform}" :class="{trans:untouching}">
       <div class="page" v-for="(item, index) in choosenTabs" :key="index" :style="{width: pageWidth}" :class="{scrollable:scrollable}"
         @touchstart="touchstart($event)"
         @touchmove="touchmove($event)"
         @touchend="touchend($event)">
-        <div class="pagewrapper" :is="item.component" :cpntId="item.cpntId" :sonScrollable="sonScrollable[index]" :sonScrollTop="sonScrollTop[index]" :msg="item.msg"></div>
+        <div class="pagewrapper" :is="item.component" :cpntId="item.cpntId" :sonScrollable="sonScrollable"></div>
       </div>
     </div>
   </div>
@@ -57,32 +57,27 @@ import Advice from './Advice'
 
 export default {
   name: 'tab',
-  props: {'choosen': {}, 'recommend': {}, 'cpntId': {}, 'scrollable': {type: Boolean, default: true}, 'scrollTop': {type: Number, default: 0}},
+  props: {'choosen': {}, 'recommend': {}, 'cpntId': {}, 'scrollable': {type: Boolean, default: true}},
   data () {
     return {
-      id: this.cpntId.split(''),
       curPage: 0,
       startX: 0,
       curX: 0,
       scrollLen: 0,
       verticalScroll: false,
       fullpageshow: false,
-      fullpageTop: 0,
       virtualIndex: 0,
       virtual: {
         index: 0,
         show: false,
         x: 0,
-        y: 0,
-        top: this.cpntId.split('')[1] === '1' ? 4 * window.getComputedStyle(document.body).fontSize.slice(0, -2) : 6 * window.getComputedStyle(document.body).fontSize.slice(0, -2)
+        y: 0
       },
       untouching: true,
       firstTouchmove: false,
       choosenTabs: this.choosen,
       recommendTabs: this.recommend,
-      sonScrollable: [false, false],
-      sonScrollTop: [-1, -1],
-      initScrollTop: 0,
+      sonScrollable: false,
       tabbar: {
         x: 0,
         y: 0,
@@ -96,13 +91,7 @@ export default {
   },
   computed: {
     indicatorLeft: function () {
-      let tbwStr = parseInt(this.tabbarWidth.slice(0, -1))
-      let tbwStr100 = tbwStr < 100 ? 100 : tbwStr
-      let rem = window.getComputedStyle(document.body).fontSize.slice(0, -2)
-      let tbw = tbwStr100 / 100 * (document.body.offsetWidth - 2 * rem) // 括号里是tab-container的宽度
-      let tw = tbw / this.choosenTabs.length
-      let trans = tw * (this.curPage + 0.5)
-      return 'translateX(calc(' + trans + 'px - 1.5rem))' // 1.5rem是indicator长度的1/2
+      return 'calc(' + ((this.curPage * 2 + 1) * 50 / this.choosenTabs.length) + '%' + ' - 1.5rem)' // 1.5rem是indicator长度的1/2
     },
     tabbarWidth: function () {
       return 25 * this.choosenTabs.length + '%'
@@ -117,7 +106,7 @@ export default {
       return 100 / this.choosenTabs.length + '%'
     },
     contentTransform: function () {
-      return 'translateX(' + (this.curX + this.scrollLen) + 'px)'
+      return this.curX + this.scrollLen + 'px'
     }
   },
   methods: {
@@ -146,16 +135,23 @@ export default {
       this.firstTouchmove = true
     },
     touchmove: function (e) {
+      // 通过父tab滑动的距离设置子tab是否可以滑动
+      let top = e.currentTarget.scrollTop
+      let sonH = e.currentTarget.firstChild.offsetHeight
+      if (top >= sonH) {
+        this.sonScrollable = true
+      } else if (top <= sonH) {
+        this.sonScrollable = false
+      }
+      let scrollX = e.touches[0].pageX - this.startX
       if (this.firstTouchmove) {
         this.firstTouchmove = false
-        let scrollX = e.touches[0].pageX - this.startX
         if (Math.abs(e.touches[0].pageY - this.startY) > Math.abs(scrollX)) {
           this.verticalScroll = true
           return
         }
       }
       if (!this.verticalScroll) {
-        let scrollX = e.touches[0].pageX - this.startX
         this.scrollLen = scrollX
         e.preventDefault()
         e.stopPropagation()
@@ -165,6 +161,25 @@ export default {
       }
     },
     touchend: function (e) {
+      function animate (time) {
+        requestAnimationFrame(animate)
+        TWEEN.update(time)
+      }
+      if (this.verticalScroll) {
+        let top = e.currentTarget.scrollTop
+        let sonH = e.currentTarget.firstChild.offsetHeight
+        if (top >= sonH - 80 && top < sonH) {
+          var TWEEN = require('@tweenjs/tween.js')
+          var tween = new TWEEN.Tween({x: e.currentTarget.scrollTop, y: e.currentTarget})
+          .to({x: sonH}, 200)
+          .onUpdate(function () {
+            this.y.scrollTop = this.x
+          })
+          tween.start()
+          requestAnimationFrame(animate)
+          this.sonScrollable = true
+        }
+      }
       if (this.scrollLen > document.body.clientWidth / 4) {
         if (this.curPage > 0) {
           this.curPage--
@@ -190,14 +205,12 @@ export default {
       }
       this.virtual.show = true
       this.virtual.x = $event.changedTouches[0].pageX + 'px'
-      let st = this.scrollTop === -1 ? this.initScrollTop : this.scrollTop
-      this.virtual.y = $event.changedTouches[0].pageY - st - this.virtual.top + 'px'
+      this.virtual.y = $event.changedTouches[0].pageY + 'px'
       this.virtual.index = index
     },
     tabTouchmove: function ($event) {
       this.virtual.x = $event.changedTouches[0].pageX + 'px'
-      let st = this.scrollTop === -1 ? this.initScrollTop : this.scrollTop
-      this.virtual.y = $event.changedTouches[0].pageY - st - this.virtual.top + 'px'
+      this.virtual.y = $event.changedTouches[0].pageY + 'px'
     },
     tabTouchend: function (index, $event) {
       this.virtual.show = false
@@ -234,31 +247,6 @@ export default {
       if (!bar.isVertical) {
         $event.stopPropagation()
       }
-    },
-    scroll: function (e) {
-      let top = e.target.scrollTop
-      let hei = e.target.firstChild.offsetHeight
-      if (top >= hei) {
-        this.sonScrollable[this.curPage] = true
-      } else {
-        this.sonScrollable[this.curPage] = false
-      }
-      this.sonScrollTop[this.curPage] = hei - top
-    }
-  },
-  mounted: function () {
-    if (this.id[1] === '1') {
-      [].forEach.call(document.getElementsByClassName('scrollable'), item => {
-        item.addEventListener('scroll', this.scroll)
-      })
-    }
-    // fullpage的virtual-tab由于定位用了absolute，位置会受到顶栏和父tab滑动距离影响([prop]this.scrollTop)。
-    // 顶栏高度在this.virtual.top中给出。
-    // 滑动高度在this.scroll()中会计算，但没有初始化的过程。
-    // 父tab的scrollTop就是0，子tab的scrollTop在这里计算出来。
-    // 父tab滑动高度初始就是pageWrapper的高度。pageWrapper也就是当前这个tab的父节点。
-    if (this.id[1] === '2') {
-      this.initScrollTop = document.getElementById(this.cpntId).parentNode.offsetHeight
     }
   },
   beforeCreate: function () {
@@ -322,28 +310,6 @@ $tabbarHeight: 2rem;
     }
   }
 
-  .tab-top {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: $tabbarHeight;
-    height: $tabbarHeight;
-    background-color: white;
-    box-shadow: -0.75rem 0rem 0.75rem -0.125rem white;
-
-    &:before {
-      content: '';
-      position: absolute;
-      top: $margin;
-      right: $margin;
-      width: $tabbarHeight - 2 * $margin;
-      height: $tabbarHeight - 2 * $margin;
-      background-image: url(./assets/tabmore.png);
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-  }
-
   .tab-container {
     position: absolute;
     width: calc(100% - 2rem);
@@ -375,7 +341,7 @@ $tabbarHeight: 2rem;
   }
 
   .fullpage {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -415,7 +381,7 @@ $tabbarHeight: 2rem;
       }
 
       .virtual-tab {
-        position: absolute;
+        position: fixed;
         opacity: 0.5;
         transform: translateX(-50%) translateY(-50%);
       }
@@ -451,8 +417,7 @@ $tabbarHeight: 2rem;
   }
 
   .scrollable {
-    overflow-y: scroll !important;
-    -webkit-overflow-scrolling: touch;
+    overflow: scroll !important;
   }
 
   .slide-fade-enter-active {

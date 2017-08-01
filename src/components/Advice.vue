@@ -1,5 +1,6 @@
 <template>
   <div class="advice">
+    {{msg}}
     <listview></listview>
   </div>
 </template>
@@ -9,7 +10,7 @@ import Listview from './Listview'
 
 export default {
   name: 'advice',
-  props: ['text'],
+  props: ['msg'],
   components: {
     'listview': Listview
   },

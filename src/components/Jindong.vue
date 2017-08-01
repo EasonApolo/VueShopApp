@@ -4,7 +4,7 @@
     afwefawvz<br>
     weteu4<br>
     5y65u<br>
-    <tab :choosen="choosenTabs" :recommend="recommendTabs" :cpntId="cpntId" :scrollable="sonScrollable"></tab> 
+    <tab :choosen="choosenTabs" :recommend="recommendTabs" :cpntId="cpntId" :scrollable="sonScrollable" :scrollTop="sonScrollTop"></tab> 
   </div>
 </template>
 
@@ -13,7 +13,7 @@ import Tab from './Tab'
 
 export default {
   name: 'jindong',
-  props: ['cpntId', 'sonScrollable'],
+  props: ['cpntId', 'sonScrollable', 'sonScrollTop'],
   components: {
     Tab
   },

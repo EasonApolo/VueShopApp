@@ -1,4 +1,14 @@
+8.1
 
+1. [重构]添加了-webkit-overlow-scrolling: touch， 使滑动更为流畅。tab中，使用scroll代替touchmove，使滑动到临界点的事件可以被监听到。
+2. [重构]为了横向滑动性能，和能开启GPU加速（看了ISUX的一篇文，大概理解是absolute+left的滑动很慢且不适合GPU加速）还是使用了transform+translateX。
+3. [重构]tab-indicator为了提高性能也换成了transform，由于indicator使用的是百分比定位（相对父元素），所以换成transform（百分比相对自身）出不一样，在计算属性indicator-left中用了一些计算。
+4. [重构]换成transform的影响计算fullpage以及其中的virtual-tab的fixed属性失效了。解决方案是：
+    1. fullpage使用absolute，仅覆盖自身所属的tab，且屏蔽其上的滑动。
+    2. virtual-tab由于touch event只能获得相对于全局的坐标，所以必须要计算。left没有变化，主要是高度。
+    高度同样改为相对于自身的高度，需要把全局坐标减去顶栏高度，再减去子tab相对顶栏的高度（即父tab高度-父tab已滑动高度）。
+    顶栏高度可以直接得到。
+    而tab相对顶栏高度的变化，可以在父tab的scroll事件中监听，并为tab新增了一个sonScrollTop属性来向子tab（同样需要经过Taobao和Jindong组件）传值。其初始化放在mounted钩子中。
 
 7.24
 
