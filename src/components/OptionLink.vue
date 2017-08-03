@@ -48,13 +48,17 @@ a {
   color: #42b983;
 }
 
+.optionlink {
+  margin-bottom: 0.625rem;
+}
+
 .ol-box {
   display: flex;
   display: -webkit-flex;
   flex-wrap: wrap;
   padding-bottom: 1px;
   overflow: hidden;
-  background-color: #EEEEEE;
+  background-color: white;
 }
 
 .ol-item {

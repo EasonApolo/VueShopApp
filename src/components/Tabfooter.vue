@@ -2,11 +2,11 @@
   <div class="tabfooter" @touchmove.prevent>
     <ul class="bottom">
       <li class="active">
-        <router-link to="/index">Index</router-link>
+        <router-link to="/index">今日推荐</router-link>
       </li><li>
         <router-link to="/#">#</router-link>
       </li><li>
-        <router-link to="/personal">Personal</router-link>
+        <router-link to="/profile">个人中心</router-link>
       </li>
     </ul>
   </div>
@@ -23,10 +23,13 @@ export default {
   methods: {
     pushToDetail: function (pprop) {
       this.$router.push({name: 'detail', query: { iprop: pprop }})
-      console.log(pprop.name)
+    },
+    pushToSearch: function (recommend, recommendIndex) {
+      this.$router.push({name: 'search', query: {recommend: recommend, recommendIndex: recommendIndex}})
     }
   },
   mounted () {
+    this.$root.eventHub.$on('pushToSearch', this.pushToSearch)
     this.$root.eventHub.$on('pushToDetail', this.pushToDetail)
   }
 }
@@ -40,6 +43,8 @@ export default {
   bottom: 0;
   width: 100%;
   height: 3rem;
+  font-size: 0.875rem;
+  z-index: 0;
 }
 
 ul {
@@ -63,10 +68,10 @@ li {
 }
 
 a {
-  color: #42b983;
+  color: #999;
   text-decoration: none;
 }
 .router-link-active {
-  color: #027943;
+  color: #FA4866;
 }
 </style>

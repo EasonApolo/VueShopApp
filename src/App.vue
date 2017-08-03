@@ -34,8 +34,6 @@ body {
   top: 0;
   width: 100%;
   height: 100%;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
 }
 a, img, button, input, textarea, div, li {
   -webkit-tap-highlight-color:rgba(255,255,255,0);
@@ -52,7 +50,6 @@ a, img, button, input, textarea, div, li {
   text-align: center;
   color: #2c3e50;
   overflow: hidden;
-  z-index: 1;
   font-size: 1rem;
 }
 </style>

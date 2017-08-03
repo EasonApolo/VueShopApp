@@ -1,6 +1,7 @@
 要本地存储的数据：
 1. 每个tab栏的choosenTabs的顺序。
 
+
 8.1
 
 1. [重构]添加了-webkit-overlow-scrolling: touch， 使滑动更为流畅。tab中，使用scroll代替touchmove，使滑动到临界点的事件可以被监听到。

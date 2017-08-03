@@ -6,7 +6,7 @@
       <ul class="tab-bar" :style="{width:tabbarWidth}">
         <div class="tab-indicator" :style="{transform: indicatorLeft}"></div>
         <li class="tab-front" v-for="(item, index) in choosenTabs" :key="index"
-          @click="forwardTo(index, $event)" :style="{width:frontTabWidth}">
+          @click="forwardTo(index, $event)" :style="{width:frontTabWidth}" :class="{tabfrontactive:index === curPage}">
           {{item.name}}
         </li>
       </ul>
@@ -317,6 +317,11 @@ $tabbarHeight: 2rem;
   width: 100%;
   height: 100%;
   background-color: white;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
   
   $margin: 0.5rem; //通过此变量调节“+”的大小
   .tab-more {
@@ -390,6 +395,10 @@ $tabbarHeight: 2rem;
     .tab-front {
       display: inline-block;
       width: 100% / $frontTabNum;
+    }
+
+    .tabfrontactive {
+      color: #FA5876;
     }
   }
 

@@ -3,7 +3,7 @@
     <div class="searchbar">
       <div class="qscan-entry">
       </div><div class="search-box">
-        <input id="search-input" type="text" v-bind:placeholder="recommend"/>
+        <div id="search-input" type="text" @click.prevent="linkToSearch">{{recommend[recommendIndex]}}</div>
       </div>
     </div>
   </div>
@@ -13,10 +13,28 @@
 
 export default {
   name: 'searchbar',
+  props: ['needRefresh'],
   data () {
     return {
-      recommend: '只要9块9毛9，爱疯7s带回家'
+      recommendIndex: 0,
+      recommend: ['棉麻女装', '睡裙', '妈妈装', '面对疾风吧', '全场9块9就问你来不来', '我喝酒，你买单']
     }
+  },
+  methods: {
+    linkToSearch: function () {
+      this.$root.eventHub.$emit('pushToSearch', this.recommend, this.recommendIndex)
+    },
+    refresh: function () {
+      if (this.needRefresh) {
+        if (this.recommend.length > 0) {
+          this.recommendIndex = Math.floor(Math.random() * this.recommend.length)
+          this.$emit('sbRefreshed')
+        }
+      }
+    }
+  },
+  watch: {
+    'needRefresh': 'refresh'
   }
 }
 </script>
@@ -99,13 +117,17 @@ $isize: 2rem;
   }
 
   #search-input {
-    width: calc(100% - 4rem);
+    display: inline-block;
+    width: calc(100% - 3rem);
     height: 100%;
+    line-height: 2rem;
     padding: 0 2rem;
     border: 0;
+    color: #888;
     background-color: #F0F0F0;
     outline: none;
-    font-size: inherit;
+    font-size: 0.9375rem;
+    text-align: left;
   }
 }
 

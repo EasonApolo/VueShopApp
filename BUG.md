@@ -1,9 +1,20 @@
+8.3
+
+1. [重要][Tab]子tab的上下bounce是黑的，切换的时候也会卡一下黑色。
+> 2. [重要][Searchbar]点击首页的searchbar会先弹出输入框再跳转。   // input改为div
+3. [重要][Search]搜索结果还没分src。
+4. [重要][Listview]数据传输与组件重用的问题。
+5. [设计][Notification]可能需要一个notification组件。接受选项和内容，触发确认、取消事件。定位在全局。
+6. [重要][Search]结果的src.id要和父tab的相同。
+7. [设计][Search]排序需求。
+
+
 8.1
 
-1. [重要][Tab]子tab在overflow:hidden变为scroll时会卡顿。
+> 1. [重要][Tab]子tab在overflow:hidden变为scroll时会卡顿。 //  见8.3.1
 > 2. [重要][Tab]sonScrollable/sonScrollTop是针对父tab的所有子tab来的。这是错误的。 //  将这两个值改为数组存取，tab交换时要修改这两个数组。
 > 3. [重要][Tab]由8.1.2引发，在choosenTabs交换、增添时，sonScrollTop和sonScrollable数组的次序也应该交换。
-4. [重要][子Tab]判断是组件懒重用问题。由于引用相同的Listview，当choosenTabs交换时，虽然PageWrapper交换了，但ListView好像没有交换。
+> 4. [重要][子Tab]判断是组件懒重用问题。由于引用相同的Listview，当choosenTabs交换时，虽然PageWrapper交换了，但ListView好像没有交换。 //见8.3.4
 5. [微调][Tab]为tab增加了一个msg属性作为测试，以后要移除。
 
 

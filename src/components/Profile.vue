@@ -1,5 +1,5 @@
 <template>
-  <div class="personal" @click="aaa">
+  <div class="profile" @click="aaa">
     fafawfefaw<br>
     fafawfefaw<br>
     fafawfefaw<br>
@@ -13,7 +13,7 @@
 <script>
 
 export default {
-  name: 'personal',
+  name: 'profile',
   data () {
     return {
 
@@ -48,7 +48,7 @@ a {
   color: #42b983;
 }
 
-.personal {
+.profile {
   height: 100%;
   height: 100%;
 }
