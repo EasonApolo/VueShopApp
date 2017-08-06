@@ -42,7 +42,7 @@
       </div>
     </transition>
     <div class="content" :style="{width: contentWidth, transform: contentTransform}" :class="{trans:untouching}">
-      <div class="page" v-for="(item, index) in choosenTabs" :key="index" :style="{width: pageWidth}" :class="{scrollable:scrollable, childrenPage:id[1] === '2'}"
+      <div class="page" v-for="(item, index) in choosenTabs" :key="index" :style="{width: pageWidth}" :class="{scrollable:scrollable, childrenPage:id[1] === '2', parentPage: id[1] === '1'}"
         @touchstart="touchstart($event)"
         @touchmove="touchmove($event)"
         @touchend="touchend($event)"
@@ -265,19 +265,28 @@ export default {
       this.scrolls[this.curPage].pageScrollTop = top
     },
     childrenScroll: function (e) {
+      console.log('a')
       this.scrolls[this.curPage].pageScrollTop = e.target.scrollTop
+    },
+    initializeScrollTop: function (e) {
+      for (let i = 0; i < this.scrolls.length; i++) {
+        document.getElementById('p' + this.cpntId + i).scrollTop = this.scrolls[i].pageScrollTop
+      }
     }
   },
   mounted: function () {
     if (this.id[1] === '1') {
-      [].forEach.call(document.getElementsByClassName('scrollable'), item => {
-        item.addEventListener('scroll', this.scroll)
-      })
+      for (let i = 0; i < this.scrolls.length; i++) {
+        document.getElementById('p' + this.cpntId + i).addEventListener('scroll', this.scroll)
+      }
+      // [].forEach.call(document.getElementsByClassName('parentPage'), item => {
+      //   item.addEventListener('scroll', this.scroll)
+      // })
     }
-    if (this.cpntId === 'l21') {
-      [].forEach.call(document.getElementsByClassName('childrenPage'), item => {
-        item.addEventListener('scroll', this.childrenScroll)
-      })
+    if (this.id[1] === '2') {
+      for (let i = 0; i < this.scrolls.length; i++) {
+        document.getElementById('p' + this.cpntId + i).addEventListener('scroll', this.childrenScroll)
+      }
     }
     // fullpage的virtual-tab由于定位用了absolute，位置会受到顶栏和父tab滑动距离影响([prop]this.scrollTop)。
     // 顶栏高度在this.virtual.top中给出。
@@ -287,6 +296,7 @@ export default {
     if (this.id[1] === '2') {
       this.initScrollTop = document.getElementById(this.cpntId).parentNode.offsetHeight
     }
+    this.$root.eventHub.$on('tabInitScrollTop', this.initializeScrollTop)
   },
   beforeCreate: function () {
     //  避免循环引用，在beforeCreate钩子这里动态引入。

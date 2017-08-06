@@ -30,9 +30,15 @@ export default {
       ]
     }
   },
+  methods: {
+    emitTabInitScrollTop: function () {
+      this.$root.eventHub.$emit('tabInitScrollTop')
+    }
+  },
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.sbNeedRefresh = true
+      vm.emitTabInitScrollTop()
     })
   }
 }

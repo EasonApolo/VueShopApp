@@ -1,6 +1,6 @@
 8.6
 
-1. [重要]在从别的路由跳转回index时应该恢复index中每个page的scrollTop。
+> 1. [重要]在从别的路由跳转回index时应该恢复index中每个page的scrollTop。 //  其实由于keep-alive，data并不会重置，只要把滚动高度存下来（scrolls.pageScroll），在index的routeEnter钩子中emit初始化事件，再在tab中监听并把高度恢复即可。且现在为每一个page都增加了id（'p' + this.cpntId + index），很容易查找。
 
 
 8.3
