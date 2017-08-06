@@ -32,7 +32,6 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      console.log(vm.sbNeedRefresh)
       vm.sbNeedRefresh = true
     })
   }

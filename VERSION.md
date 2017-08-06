@@ -1,6 +1,95 @@
 要本地存储的数据：
 1. 每个tab栏的choosenTabs的顺序。
 
+要请求的数据：
+1. 搜索推荐
+格式：字符串数组
+长度：建议不大于10
+顺序：可以按重要度排序或者标明最重要的
+例：['', '', '']
+拓展：可能需要拓展为对象数组。
+
+2. 搜索源和联想词
+格式：对象数组
+长度：开放平台的数量，目前仅有淘宝和京东，即为2
+顺序：无要求，前端会按用户设置的平台顺序展示
+对象属性：
+    1.  键: id
+        值: 字符串
+        要求：能表明源即可，最好是拼音
+        例: id: 'taobao'
+    2.  键: auto
+        值: 字符串数组
+        长度：建议不大于10或15
+        顺序：可以按长度或者字母表顺序排序
+        例：auto: ['裙子', '裙子长', '裙子白色']
+        拓展：可能会有其它属性，如“是否为热门”，“是否置顶”（广告联想词？）
+例：[{id: 'taobao', auto: ['裙子', '裙子长', '裙子白色']}, {id: 'jindong', auto: ['裙子', '裙子长的', '裙子黄色']}]
+拓展：如果不方便一次请求多个平台，也可以由前端分别向后端请求单独平台的结果，则只需要返回一个对象即可。
+
+3. 首页内容
+同搜索结果
+参数：请求时可能会提供一个分类字符串作为模糊的搜索参数
+例：‘精选’，‘家居’，‘数码’
+返回长度：最好为5-10个
+
+3. 搜索结果
+参数：请求时会提供一个字符串作为准确的搜索参数
+格式：对象数组
+长度：最好为5-10个
+对象属性：
+    1.  键：id
+        值：字符串（也许是整数）
+        例：id: '1251b5iuh'
+    2.  键：name
+        值：字符串
+        例：name: '拖鞋拖鞋 好用的拖鞋 童叟无欺 绝对实惠'
+    3.  键：price
+        值：字符串或浮点数
+        解释：应为商品原价
+        例：price: '36.5'
+    4.  键：discount
+        值：字符串或整数或浮点数
+        例：discount: '10'
+    5.  键：volume
+        值：整数或字符串
+        解释：商品销量
+        例：volume: 12051
+    6.  键：item-url
+        值：字符串
+        解释：商品页面的url（用于跳转）
+        例：item-url: 'http://taobao.com/item/1251b5iuh'
+    7.  键：img-url
+        值：字符串
+        解释：商品的图片的url（用于在搜索结果中展示）
+        例：img-url: 'https://taobao.com/image/1251b5iuh.png'
+    8.  键：discount-require（可选）
+        值：字符串或整数
+        解释：券可能要满XX元才能优惠，如满50可用，或满50减10
+        例：discount-require: 50
+    9.  键：type（可选）
+        值：字符串
+        解释：如果同样可用搜索、展示店铺的话，需要用type来区分这个数据是店铺还是商品
+        例：type: 'item'
+例：listData: [
+        {type: 'shop', name: '店铺名长长长长长长长长长长长长', imgUrl: 'http://taobao.com/image/1251b5iuh/index.png', assess: [3, 5, 4.4], shopUrl: 'dianpuURL'},
+        {type: 'shop', name: '店铺名长长', imgUrl: 'http://taobao.com/image/1251b5iuh/index.png', assess: [3.5, 4.3, 2.1], shopUrl: 'dianpuURL'},
+        {type: 'shop', name: '水果手机专卖店', imgUrl: 'http://taobao.com/image/1251b5iuh/index.png', assess: [5, 4.6, 3.9], shopUrl: 'dianpuURL'},
+        {type: 'item', name: '商品名长长长长长长长长长长长长', imgUrl: 'http://taobao.com/image/1251b5iuh/index.png', price: 6.66, itemUrl: 'dianpuURL', volume: 5, discount: 10},
+        {type: 'item', name: '商品名长长', imgUrl: 'http://taobao.com/image/1251b5iuh/index.png', price: 23.33, itemUrl: 'dianpuURL', volume: 780, discount: 10},
+        {type: 'item', name: '商品名长', imgUrl: require('./assets/S.png'), price: 8088.00, itemUrl: 'dianpuURL', volume: 123102, discount: 10},
+        {type: 'shop', name: '店铺名长长长长长长长长长长长长', imgUrl: 'http://taobao.com/image/1251b5iuh/index.png', assess: [3, 5, 4.4], shopUrl: 'dianpuURL'},
+        {type: 'shop', name: '店铺名长长', imgUrl: 'http://taobao.com/image/1251b5iuh/index.png', assess: [3.5, 4.3, 2.1], shopUrl: 'dianpuURL'},
+        {type: 'shop', name: '水果手机专卖店', imgUrl: 'http://taobao.com/image/1251b5iuh/index.png', assess: [5, 4.6, 3.9], shopUrl: 'dianpuURL'},
+        {type: 'item', name: '商品名长长长长长长长长长长长长', imgUrl: 'http://taobao.com/image/1251b5iuh/index.png', price: 6.66, itemUrl: 'dianpuURL', volume: 5, discount: 10},
+        {type: 'item', name: '商品名长长', imgUrl: 'http://taobao.com/image/1251b5iuh/index.png', price: 23.33, itemUrl: 'dianpuURL', volume: 780, discount: 10},
+        {type: 'item', name: '商品名长', imgUrl: require('./assets/S.png'), price: 8088.00, itemUrl: 'dianpuURL', volume: 123102, discount: 10}
+      ]
+
+8.6
+
+1. [新增]整合了Profile和浏览记录组件。使用localStorage存储浏览记录。
+
 
 8.1
 

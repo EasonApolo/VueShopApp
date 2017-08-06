@@ -26,11 +26,15 @@ export default {
     },
     pushToSearch: function (recommend, recommendIndex) {
       this.$router.push({name: 'search', query: {recommend: recommend, recommendIndex: recommendIndex}})
+    },
+    pushToBrowseRecords: function () {
+      this.$router.push({name: 'browse_records'})
     }
   },
   mounted () {
     this.$root.eventHub.$on('pushToSearch', this.pushToSearch)
     this.$root.eventHub.$on('pushToDetail', this.pushToDetail)
+    this.$root.eventHub.$on('pushToBrowseRecords', this.pushToBrowseRecords)
   }
 }
 </script>

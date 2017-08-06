@@ -42,7 +42,7 @@
       </div>
     </transition>
     <div class="content" :style="{width: contentWidth, transform: contentTransform}" :class="{trans:untouching}">
-      <div class="page" v-for="(item, index) in choosenTabs" :key="index" :style="{width: pageWidth}" :class="{scrollable:scrollable}"
+      <div class="page" v-for="(item, index) in choosenTabs" :key="index" :style="{width: pageWidth}" :class="{scrollable:scrollable, childrenPage:id[1] === '2'}"
         @touchstart="touchstart($event)"
         @touchmove="touchmove($event)"
         @touchend="touchend($event)"
@@ -263,12 +263,20 @@ export default {
       this.scrolls[this.curPage].sonScrollable = top >= hei
       this.scrolls[this.curPage].sonScrollTop = hei - top
       this.scrolls[this.curPage].pageScrollTop = top
+    },
+    childrenScroll: function (e) {
+      this.scrolls[this.curPage].pageScrollTop = e.target.scrollTop
     }
   },
   mounted: function () {
     if (this.id[1] === '1') {
       [].forEach.call(document.getElementsByClassName('scrollable'), item => {
         item.addEventListener('scroll', this.scroll)
+      })
+    }
+    if (this.cpntId === 'l21') {
+      [].forEach.call(document.getElementsByClassName('childrenPage'), item => {
+        item.addEventListener('scroll', this.childrenScroll)
       })
     }
     // fullpage的virtual-tab由于定位用了absolute，位置会受到顶栏和父tab滑动距离影响([prop]this.scrollTop)。
@@ -285,6 +293,9 @@ export default {
     this.$options.components.Taobao = require('./Taobao.vue')
     this.$options.components.Jindong = require('./Jindong.vue')
     this.$options.components.Weipinghui = require('./Weipinghui.vue')
+  },
+  watch: {
+    'route': 'routeChange'
   }
 }
 </script>
@@ -489,8 +500,7 @@ $tabbarHeight: 2rem;
   .slide-fade-leave-active {
     transition: all .2s ease;
   }
-  .slide-fade-enter, .slide-fade-leave-to
-  /* .slide-fade-leave-active for below version 2.1.8 */ {
+  .slide-fade-enter, .slide-fade-leave-to {
     transform: translateY(20px);
     opacity: 0;
   }

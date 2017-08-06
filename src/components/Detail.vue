@@ -54,11 +54,41 @@ export default {
       history.go(-1)
     },
     fetchdata: function () {
-      this.iprop = this.$route.query.iprop
+      let b = document.getElementsByClassName('dt-body')[0]
+      if (b !== undefined) {
+        document.getElementsByClassName('dt-body')[0].scrollTop = 0
+        this.iprop = this.$route.query.iprop
+        this.addBrowseHistory()
+      }
+    },
+    addBrowseHistory: function () {
+      if (this.iprop === null || this.iprop === [null]) {
+        return
+      }
+      let thisbh = []
+      let lsbh = localStorage.browseHistory
+      if (lsbh !== undefined && lsbh !== '') {
+        thisbh = JSON.parse(lsbh)
+      }
+      let i = 0
+      for (; i < thisbh.length; i++) {
+        let name = thisbh[i].name
+        if (name === this.iprop.name) {
+          thisbh.unshift(thisbh.splice(i, 1)[0])
+          break
+        }
+      }
+      if (i === thisbh.length) {
+        thisbh.unshift(this.iprop)
+      }
+      localStorage.browseHistory = JSON.stringify(thisbh)
     }
   },
   watch: {
     '$route': 'fetchdata'
+  },
+  mounted () {
+    this.addBrowseHistory()
   }
 }
 </script>
@@ -90,6 +120,8 @@ a {
   right: 0;
   bottom: 3rem;
   background-color: #F1F1F1;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 $headH: 3rem;

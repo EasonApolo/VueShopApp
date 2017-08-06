@@ -1,3 +1,8 @@
+8.6
+
+1. [重要]在从别的路由跳转回index时应该恢复index中每个page的scrollTop。
+
+
 8.3
 
 1. [重要][Tab]子tab的上下bounce是黑的，切换的时候也会卡一下黑色。
@@ -7,6 +12,8 @@
 5. [设计][Notification]可能需要一个notification组件。接受选项和内容，触发确认、取消事件。定位在全局。
 6. [重要][Search]结果的src.id要和父tab的相同。
 7. [设计][Search]排序需求。
+8. [优化][Tab][7.18.5]tab-indicator在要超出view的时候tab也能自动滑动过去。
+9. [重要][路由]Tabfooter来回点的路由记录不应该被存储。而search、detail页面的路由应该被存储。
 
 
 8.1
@@ -41,8 +48,8 @@
 > 1. [重要]子tab栏的bar不能滑动。
 > 2. [重要][滑动]子栏未到顶时滑动子栏，子栏会滑动，不太合适。
 > 3. [重要][定位]弹出的fullPage高度和位置不合适，由于“transform属性导致子元素fixed失效变为absolute（在Chrome下）”问题导致。
-4. [优化]tab栏滑动到头可以有一个提示。
-5. [优化]tab-indicator在要超出view的时候tab也能自动滑动过去。
+> 4. [优化]tab栏滑动到头可以有一个提示。   // 加了-webkit-overflow-scrolling：touch后正常了
+> 5. [优化]tab-indicator在要超出view的时候tab也能自动滑动过去。   //已转至8.3.8
 > 6. [重要][定位]virtual-tab也是fixed的，和3一样，位置有错。
 
 

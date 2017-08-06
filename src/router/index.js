@@ -17,7 +17,8 @@ export default new Router({
     {
       path: '/profile',
       name: 'profile',
-      component: resolve => require(['@/components/Profile.vue'], resolve)
+      component: resolve => require(['@/components/Profile.vue'], resolve),
+      meta: {keepAlive: true}
     },
     {
       path: '/detail',
@@ -28,6 +29,11 @@ export default new Router({
       path: '/search',
       name: 'search',
       component: resolve => require(['@/components/Search.vue'], resolve)
+    },
+    {
+      path: '/browse_records',
+      name: 'browse_records',
+      component: resolve => require(['@/components/BrowseRecords.vue'], resolve)
     }
   ]
 })
