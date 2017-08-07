@@ -86,6 +86,12 @@
         {type: 'item', name: '商品名长', imgUrl: require('./assets/S.png'), price: 8088.00, itemUrl: 'dianpuURL', volume: 123102, discount: 10}
       ]
 
+8.7
+
+1. [新增]整合了Profile里的各个组件。
+2. [优化]为router-link增加了replace选项，以使路由切换时不会重复叠加历史记录。
+
+
 8.6
 
 1. [新增]整合了Profile和浏览记录组件。使用localStorage存储浏览记录。

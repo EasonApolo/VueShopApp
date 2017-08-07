@@ -2,11 +2,11 @@
   <div class="tabfooter" @touchmove.prevent>
     <ul class="bottom">
       <li class="active">
-        <router-link to="/index">今日推荐</router-link>
+        <router-link to="/index" replace>今日推荐</router-link>
       </li><li>
-        <router-link to="/#">#</router-link>
+        <router-link to="/#" replace>#</router-link>
       </li><li>
-        <router-link to="/profile">个人中心</router-link>
+        <router-link to="/profile" replace>个人中心</router-link>
       </li>
     </ul>
   </div>
@@ -29,12 +29,32 @@ export default {
     },
     pushToBrowseRecords: function () {
       this.$router.push({name: 'browse_records'})
+    },
+    pushToPayRecords: function () {
+      this.$router.push({name: 'pay_records'})
+    },
+    pushToPointPage: function () {
+      this.$router.push({name: 'point_page'})
+    },
+    pushToSetting: function () {
+      this.$router.push({name: 'setting'})
+    },
+    pushToBuyRecords: function () {
+      this.$router.push({name: 'buy_records'})
+    },
+    pushToMyData: function () {
+      this.$router.push({name: 'mydata'})
     }
   },
   mounted () {
     this.$root.eventHub.$on('pushToSearch', this.pushToSearch)
     this.$root.eventHub.$on('pushToDetail', this.pushToDetail)
     this.$root.eventHub.$on('pushToBrowseRecords', this.pushToBrowseRecords)
+    this.$root.eventHub.$on('pushToPayRecords', this.pushToPayRecords)
+    this.$root.eventHub.$on('pushToPointPage', this.pushToPointPage)
+    this.$root.eventHub.$on('pushToSetting', this.pushToSetting)
+    this.$root.eventHub.$on('pushToBuyRecords', this.pushToBuyRecords)
+    this.$root.eventHub.$on('pushToMyData', this.pushToMyData)
   }
 }
 </script>

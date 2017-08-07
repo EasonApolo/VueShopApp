@@ -34,6 +34,31 @@ export default new Router({
       path: '/browse_records',
       name: 'browse_records',
       component: resolve => require(['@/components/BrowseRecords.vue'], resolve)
+    },
+    {
+      path: '/pay_records',
+      name: 'pay_records',
+      component: resolve => require(['@/components/PayRecords.vue'], resolve)
+    },
+    {
+      path: '/point_page',
+      name: 'point_page',
+      component: resolve => require(['@/components/PointPage.vue'], resolve)
+    },
+    {
+      path: '/setting',
+      name: 'setting',
+      component: resolve => require(['@/components/Setting.vue'], resolve)
+    },
+    {
+      path: '/buy_records',
+      name: 'buy_records',
+      component: resolve => require(['@/components/BuyRecords.vue'], resolve)
+    },
+    {
+      path: '/mydata',
+      name: 'mydata',
+      component: resolve => require(['@/components/Mydata.vue'], resolve)
     }
   ]
 })

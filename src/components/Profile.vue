@@ -3,12 +3,12 @@
     <!--顶部栏-->
     <div class="user_center">
             <span id="user">个人中心</span>
-            <div class="setting" onclick="window.location.href='setting.html'"><img src="icon/设置.png" style="width: 30px;height: 30px;"></div>
+            <div class="setting" @click="linkToSetting"><img :src="settingIcon" style="width: 30px;height: 30px;"></div>
     </div>
 
     <!--登陆栏-->
     <div class="login">
-        <div class="user_head"><img id="img" src="icon/user_center_default_head.png"></div>
+        <div class="user_head"><img id="img" :src="avatar"></div>
         <div class="login_box">
             <div class="login_prompt1">登陆 / 注册</div>
             <div class="login_prompt2">点击登陆享受更多优惠！</div>
@@ -22,7 +22,7 @@
                 <div id="title1" @click="linkToBrowseRecords">浏览记录</div>
             </div>
             <div class="col">
-                <div id="title2" onclick = "document.getElementById('light').style.display='block'">推荐人</div>
+                <div id="title2" @click="lightShow = true">推荐人</div>
             </div>
             <div class="col">
                 <div id="title3">返利记录</div>
@@ -32,45 +32,45 @@
 
     <!--几个选项-->
     <div class="useritem">
-        <div class="item1" onclick="window.location.href='buy_records.html'"><span class="text">购买记录</span></div>
-        <div class="item2" onclick="window.location.href='point-page.html'" ><span class="text">积分管理</span> </div>
-        <div class="item3" onclick="window.location.href='pay.html'"><span class="text">支付管理</span></div>
-        <div class="item4" onclick="window.location.href='mydata.html'"><span class="text">个人资料</span></div>
+        <div class="item1" @click="linkToBuyRecords"><span class="text">购买记录</span></div>
+        <div class="item2" @click="linkToPointPage"><span class="text">积分管理</span> </div>
+        <div class="item3" @click="linkToPayRecords"><span class="text">支付管理</span></div>
+        <div class="item4" @click="linkToMyData"><span class="text">个人资料</span></div>
         <div class="item5" >。。。。</div>
     </div>
 
     <!--消息提示栏-->
     <div class="message-box">
         <div class="row">
-            <div id="bt1" onclick="ShowImage(1,'tab'),color(1,'bt')" style="color: #FA5876">
+            <div id="bt1" @click="show = 0" :class="{active: show === 0}">
                 <div class="title">系统消息</div>
             </div>
-            <div id="bt2" onclick="ShowImage(2,'tab'),color(2,'bt')">
+            <div id="bt2" @click="show = 1" :class="{active: show === 1}">
                 <div class="title">我的消息</div>
             </div>
-            <div id="bt3" onclick="ShowImage(3,'tab'),color(3,'bt')">
+            <div id="bt3" @click="show = 2" :class="{active: show === 2}">
                 <div class="title">收到的评论</div>
             </div>
-            <div id="bt4" onClick="ShowImage(4,'tab'),color(4,'bt')">
+            <div id="bt4" @click="show = 3" :class="{active: show === 3}">
                 <div class="title">发出的评论</div>
             </div>
         </div>
     </div>
     <div class="message">
-    <div style="display:block" id="tab1">
+    <div  v-show="show === 0" id="tab1">
         此处显示系统消息
     </div>
-    <div style="display:none" id="tab2">
+    <div  v-show="show === 1" id="tab2">
         此处显示我的消息
     </div>
-    <div style="display:none" id="tab3">
+    <div  v-show="show === 2" id="tab3">
         此处显示我收到的评论
     </div>
-    <div style="display:none" id="tab4">
+    <div  v-show="show === 3" id="tab4">
         此处显示我发出的评论
     </div>
     </div>
-    <div id="light" class="white_content">
+    <div id="light" class="white_content" :class="{lightShow: lightShow}">
         <div class="wodetj">
             <div id="content1">我的推荐:</div>
             <ul id="content2">
@@ -83,7 +83,7 @@
             <div id="content3">推荐我的:</div>
             <div id="content4">推荐人姓名</div>
         </div>
-        <div id="close" onclick = "document.getElementById('light').style.display='none'"><img width="60px" height="80px" :src="backSrc"> </div>
+        <div id="close" @click="lightShow = false"><img width="60px" height="80px" :src="backSrc2"> </div>
     </div>
   </div>
 </template>
@@ -94,12 +94,32 @@ export default {
   name: 'profile',
   data () {
     return {
-      backSrc: require('./assets/close.png')
+      avatar: require('./assets/user_center_default_head.png'),
+      settingIcon: require('./assets/设置.png'),
+      backSrc: require('./assets/close.png'),
+      backSrc2: require('./assets/close 2.png'),
+      show: 0,
+      lightShow: false
     }
   },
   methods: {
     linkToBrowseRecords: function () {
       this.$root.eventHub.$emit('pushToBrowseRecords')
+    },
+    linkToPayRecords: function () {
+      this.$root.eventHub.$emit('pushToPayRecords')
+    },
+    linkToPointPage: function () {
+      this.$root.eventHub.$emit('pushToPointPage')
+    },
+    linkToSetting: function () {
+      this.$root.eventHub.$emit('pushToSetting')
+    },
+    linkToBuyRecords: function () {
+      this.$root.eventHub.$emit('pushToBuyRecords')
+    },
+    linkToMyData: function () {
+      this.$root.eventHub.$emit('pushToMyData')
     }
   }
 }
@@ -115,12 +135,6 @@ ul {
   list-style-type: none;
   padding: 0;
 }
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
 a {
   color: #42b983;
 }
@@ -203,6 +217,10 @@ a {
     border-right:1px dashed #e0e0e0;
 }
 
+.active {
+   color: #42b983;
+}
+
 #title1,#title2,#title3,.title {font-size: 1rem;margin-top: 14px;}
 
 /*各种选项*/
@@ -212,11 +230,13 @@ a {
     border: 1px solid #d2d2d2;
     border-radius:5px;
 }
-.useritem  div {
+.useritem div {
     height: 50px;
-
     padding-left: 15px;
     border-bottom: 1px solid #d2d2d2;
+}
+.useritem div:last-child {
+  border: none;
 }
 .text{
     line-height: 50px;
@@ -241,6 +261,9 @@ a {
     z-index:1002;
     overflow: auto;
     text-align: center;
+}
+.lightShow {
+  display: block;
 }
 .wodetj{
     margin: 0 auto;
@@ -269,9 +292,6 @@ a {
 }
 #content4{
     padding-top: 20px;
-}
-#li1,#li2,#li3{
-    margin-left: -75px;
 }
 #close{
     margin-top: 50px;
