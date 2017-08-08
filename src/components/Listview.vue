@@ -1,6 +1,6 @@
 <template>
   <div class="listview">
-    <ul v-for="(listItem, index) in listDataShow" :key="index"
+    <ul v-for="(listItem, index) in listData" :key="index"
       :is="listItem.type" :ownprop="listItem">
     </ul>
   </div>
@@ -13,7 +13,7 @@ import Dummy from './Dummy'
 
 export default {
   name: 'listview',
-  props: [],
+  props: ['scrollBottom'],
   components: {
     'item': Item,
     'shop': Shop
@@ -21,14 +21,7 @@ export default {
   data () {
     return {
       start: 0,
-      end: 6,
       listData: [
-        {type: 'shop', name: '店铺名长长长长长长长长长长长长', imgUrl: Dummy.prototype.get(), assess: [3, 5, 4.4], shopUrl: 'dianpuURL'},
-        {type: 'shop', name: '店铺名长长', imgUrl: Dummy.prototype.get(), assess: [3.5, 4.3, 2.1], shopUrl: 'dianpuURL'},
-        {type: 'shop', name: '水果手机专卖店', imgUrl: Dummy.prototype.get(), assess: [5, 4.6, 3.9], shopUrl: 'dianpuURL'},
-        {type: 'item', name: '商品名长长长长长长长长长长长长', imgUrl: Dummy.prototype.get(), price: 6.66, itemUrl: 'dianpuURL', volume: 5, discount: 10},
-        {type: 'item', name: '商品名长长', imgUrl: Dummy.prototype.get(), price: 23.33, itemUrl: 'dianpuURL', volume: 780, discount: 10},
-        {type: 'item', name: '商品名长', imgUrl: require('./assets/S.png'), price: 8088.00, itemUrl: 'dianpuURL', volume: 123102, discount: 10},
         {type: 'shop', name: '店铺名长长长长长长长长长长长长', imgUrl: Dummy.prototype.get(), assess: [3, 5, 4.4], shopUrl: 'dianpuURL'},
         {type: 'shop', name: '店铺名长长', imgUrl: Dummy.prototype.get(), assess: [3.5, 4.3, 2.1], shopUrl: 'dianpuURL'},
         {type: 'shop', name: '水果手机专卖店', imgUrl: Dummy.prototype.get(), assess: [5, 4.6, 3.9], shopUrl: 'dianpuURL'},
@@ -42,6 +35,22 @@ export default {
     listDataShow: function () {
       return this.listData.slice(this.start, this.end)
     }
+  },
+  methods: {
+    scrollBottomChanged: function () {
+      if (this.scrollBottom) {
+        fetch('http://forvera.me/getData.php')
+        .then(response => {
+          return response.json()
+          .then(json => {
+            this.listData = this.listData.concat(json)
+          })
+        })
+      }
+    }
+  },
+  watch: {
+    'scrollBottom': 'scrollBottomChanged'
   }
 }
 </script>

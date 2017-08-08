@@ -47,14 +47,14 @@
         @touchmove="touchmove($event)"
         @touchend="touchend($event)"
         :id="'p'+cpntId+index">
-        <div class="pagewrapper" :is="item.component" :cpntId="item.cpntId" :sonScrollable="scrolls[index].sonScrollable" :sonScrollTop="scrolls[index].sonScrollTop" :msg="item.msg"></div>
+        <div class="pagewrapper" :is="item.component" :cpntId="item.cpntId" :sonScrollable="scrolls[index].sonScrollable" :sonScrollTop="scrolls[index].sonScrollTop" :msg="item.msg" :scrollBottom="scrolls[index].scrollBottom"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Advice from './Advice'
+import Listview from './Listview'
 
 export default {
   name: 'tab',
@@ -93,13 +93,15 @@ export default {
           return {
             sonScrollTop: -1,
             sonScrollable: false,
-            pageScrollTop: 0
+            pageScrollTop: 0,
+            scrollBottom: false,
+            height: 0
           }
         })
     }
   },
   components: {
-    Advice
+    Listview
   },
   computed: {
     indicatorLeft: function () {
@@ -265,8 +267,8 @@ export default {
       this.scrolls[this.curPage].pageScrollTop = top
     },
     childrenScroll: function (e) {
-      console.log('a')
       this.scrolls[this.curPage].pageScrollTop = e.target.scrollTop
+      this.scrolls[this.curPage].scrollBottom = e.target.scrollTop + this.scrolls[this.curPage].height >= e.target.firstChild.offsetHeight
     },
     initializeScrollTop: function (e) {
       for (let i = 0; i < this.scrolls.length; i++) {
@@ -285,7 +287,9 @@ export default {
     }
     if (this.id[1] === '2') {
       for (let i = 0; i < this.scrolls.length; i++) {
-        document.getElementById('p' + this.cpntId + i).addEventListener('scroll', this.childrenScroll)
+        let curP = document.getElementById('p' + this.cpntId + i)
+        curP.addEventListener('scroll', this.childrenScroll)
+        this.scrolls[i].height = curP.offsetHeight
       }
     }
     // fullpage的virtual-tab由于定位用了absolute，位置会受到顶栏和父tab滑动距离影响([prop]this.scrollTop)。

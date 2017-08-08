@@ -125,14 +125,13 @@ a {
     position: relative;
     background-color:#FA5876;
     height: 3rem;
-    padding-top: 1rem;
 }
 #back{
     position: absolute;
     width: 1.5rem;
     height: 1.5rem;
     left: 1rem;
-    top: 1.75rem;
+    top: .75rem;
     z-index: 1;
     background-image: url(./assets/back.png);
     background-size: contain;
@@ -140,7 +139,7 @@ a {
 }
 #text{
     position: absolute;
-    top: 1rem;
+    top: 0;
     width: 100%;
     line-height: 3rem;
     font-size:1.2rem;
