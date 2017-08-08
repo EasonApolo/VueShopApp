@@ -30,6 +30,7 @@
         </div>
     </div>
 
+    <div class="scrollbar">
     <!--几个选项-->
     <div class="useritem">
         <div class="item1" @click="linkToBuyRecords"><span class="text">购买记录</span></div>
@@ -68,6 +69,7 @@
     </div>
     <div  v-show="show === 3" id="tab4">
         此处显示我发出的评论
+    </div>
     </div>
     </div>
     <div id="light" class="white_content" :class="{lightShow: lightShow}">
@@ -197,6 +199,14 @@ a {
 }
 .login_prompt2 {margin-top: 5px;color: #0088cc;font-size: 12px;}
 
+.scrollbar{
+    position: absolute;
+    width: 100%;
+    overflow-y: scroll;
+    top: 214px;
+    bottom: 4rem;
+}
+
 /*记录信息*/
 .record,.message-box{
     padding-left: 10px;
@@ -249,7 +259,9 @@ a {
     border:1px solid #d2d2d2;
     border-radius: 5px;
 }
-
+#tab1,#tab2,#tab3,#tab3{
+    padding-left: 10px;
+}
 .white_content {
     display: none;
     position: absolute;
