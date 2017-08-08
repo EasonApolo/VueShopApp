@@ -131,7 +131,7 @@ a {
     width: 1.5rem;
     height: 1.5rem;
     left: 1rem;
-    top: .75rem;
+    top: 0.75rem;
     z-index: 1;
     background-image: url(./assets/back.png);
     background-size: contain;
@@ -139,7 +139,7 @@ a {
 }
 #text{
     position: absolute;
-    top: 0;
+    top: 0rem;
     width: 100%;
     line-height: 3rem;
     font-size:1.2rem;
