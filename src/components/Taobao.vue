@@ -22,15 +22,15 @@ export default {
   data () {
     return {
       choosenTabs: [
-        {index: 0, name: '精选', default: true, component: 'advice', text: 'test1', msg: '00'},
-        {index: 1, name: '女装', default: false, component: 'advice', text: 'text2', msg: '11'},
-        {index: 2, name: '家居', default: false, component: 'advice', text: 'text3', msg: '22'},
-        {index: 3, name: '数码', default: false, component: 'advice', text: 'text4', msg: '33'},
-        {index: 2, name: '运动', default: false, component: 'advice', text: 'test3', msg: '44'}
+        {index: 0, name: '精选', default: true, component: 'listview', text: 'test1', msg: '00'},
+        {index: 1, name: '女装', default: false, component: 'listview', text: 'text2', msg: '11'},
+        {index: 2, name: '家居', default: false, component: 'listview', text: 'text3', msg: '22'},
+        {index: 3, name: '数码', default: false, component: 'listview', text: 'text4', msg: '33'},
+        {index: 2, name: '运动', default: false, component: 'listview', text: 'test3', msg: '44'}
       ],
       recommendTabs: [
-        {index: 0, name: '9块9', default: false, component: 'advice', text: 'test1'},
-        {index: 1, name: '绅士', default: false, component: 'advice', text: 'test2'}
+        {index: 0, name: '9块9', default: false, component: 'listview', text: 'test1'},
+        {index: 1, name: '绅士', default: false, component: 'listview', text: 'test2'}
       ]
     }
   }

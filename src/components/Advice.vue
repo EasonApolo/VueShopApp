@@ -16,6 +16,11 @@ export default {
   data () {
     return {
     }
+  },
+  methods: {
+    scroll: function () {
+      console.log('ba')
+    }
   }
 }
 </script>
