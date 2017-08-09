@@ -42,6 +42,7 @@
 <script>
 import Faker from './Faker'
 import Listview from './Listview'
+import Statusbar from './Statusbar'
 
 export default {
   name: 'search',
@@ -149,12 +150,26 @@ export default {
     updateRecommend: function () {
       this.recommend = this.$route.query.recommend
       this.recommendIndex = this.$route.query.recommendIndex
+    },
+    updateStatusBar: function (isEnter) {
+      if (isEnter) {
+        Statusbar.prototype.toDefault()
+        Statusbar.prototype.toWhite()
+      } else {
+        Statusbar.prototype.toLight()
+        Statusbar.prototype.toMain()
+      }
     }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.updateRecommend()
+      vm.updateStatusBar(true)
     })
+  },
+  beforeRouteLeave (to, from, next) {
+    this.updateStatusBar(false)
+    next()
   }
 }
 </script>

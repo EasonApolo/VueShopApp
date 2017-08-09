@@ -12,8 +12,8 @@
 5. [设计][Notification]可能需要一个notification组件。接受选项和内容，触发确认、取消事件。定位在全局。
 6. [重要][Search]结果的src.id要和父tab的相同。
 7. [设计][Search]排序需求。
-8. [优化][Tab][7.18.5]tab-indicator在要超出view的时候tab也能自动滑动过去。
-9. [重要][路由]Tabfooter来回点的路由记录不应该被存储。而search、detail页面的路由应该被存储。
+> 8. [优化][Tab][7.18.5]tab-indicator在要超出view的时候tab也能自动滑动过去。  // 在Tab里watch了tabIndicator的变化。
+> 9. [重要][路由]Tabfooter来回点的路由记录不应该被存储。而search、detail页面的路由应该被存储。      //router-link增加了replace属性
 
 
 8.1

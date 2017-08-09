@@ -3,7 +3,7 @@
     <div class="tab-container"
       @touchstart="tabbarTouchstart($event)"
       @touchmove="tabbarTouchmove($event)">
-      <ul class="tab-bar" :style="{width:tabbarWidth}">
+      <ul class="tab-bar" :style="{width:tabbarWidth}" :id="'tb'+cpntId">
         <div class="tab-indicator" :style="{transform: indicatorLeft}"></div>
         <li class="tab-front" v-for="(item, index) in choosenTabs" :key="index"
           @click="forwardTo(index, $event)" :style="{width:frontTabWidth}" :class="{tabfrontactive:index === curPage}">
@@ -274,6 +274,34 @@ export default {
       for (let i = 0; i < this.scrolls.length; i++) {
         document.getElementById('p' + this.cpntId + i).scrollTop = this.scrolls[i].pageScrollTop
       }
+    },
+    indicatorChange: function () {
+      this.$nextTick(() => {
+        let tb = document.getElementById('tb' + this.cpntId)
+        let left = tb.lastChild.offsetWidth * this.curPage
+        let right = tb.lastChild.offsetWidth * (this.curPage + 1)
+        let scroll = tb.parentNode.scrollLeft
+        let width = tb.parentNode.offsetWidth
+        let toScroll
+        if (right - scroll >= width) {
+          toScroll = right - width
+        } else if (left < scroll) {
+          toScroll = left
+        }
+        var TWEEN = require('@tweenjs/tween.js')
+        var tween = new TWEEN.Tween({x: scroll, y: tb.parentNode})
+          .to({x: toScroll}, 300)
+          .onUpdate(function () {
+            this.y.scrollLeft = this.x
+          })
+        tween.start()
+        requestAnimationFrame(animate)
+
+        function animate (time) {
+          requestAnimationFrame(animate)
+          TWEEN.update(time)
+        }
+      })
     }
   },
   mounted: function () {
@@ -309,7 +337,8 @@ export default {
     this.$options.components.Weipinghui = require('./Weipinghui.vue')
   },
   watch: {
-    'route': 'routeChange'
+    'route': 'routeChange',
+    'indicatorLeft': 'indicatorChange'
   }
 }
 </script>
