@@ -139,7 +139,6 @@ a {
 #top{
     position: relative;
     background-color:#FA5876;
-    padding-top: 1rem;
     height: 3rem;
 }
 #back{
@@ -147,7 +146,7 @@ a {
     width: 1.5rem;
     height: 1.5rem;
     left: 1rem;
-    top: 1.75rem;
+    top: .75rem;
     z-index: 1;
     background-image: url(./assets/back.png);
     background-size: contain;
@@ -194,7 +193,7 @@ a {
 #content{
     position: absolute;
     width: 100%;
-    top: 6rem;
+    top: 5rem;
     bottom: 0px;
     overflow: scroll;
     background-color: #F0F0F0;

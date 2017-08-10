@@ -195,7 +195,6 @@ a {
 }
 
 .search {
-  padding-top: 1rem;
   position: absolute;
   width: 100%;
   top: 0;

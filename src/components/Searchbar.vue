@@ -59,8 +59,8 @@ a {
   color: #42b983;
 }
 
-$timeMargin: 1rem;  //时间栏
-$barHeight: 3rem;   //除去时间栏的高度
+$timeMargin: 0rem;  //时间栏
+$barHeight: 2rem;   //除去时间栏的高度
 $barMargin: 0.5rem; //搜索框顶距
 
 .search {
@@ -68,14 +68,13 @@ $barMargin: 0.5rem; //搜索框顶距
   left: 0;
   top: 0;
   width: 100%;
-  height: 4rem;
+  height: 3rem;
 }
 .searchbar {
   position: relative;
   width: 100%;
   height: $barHeight;
-  padding-top: $timeMargin;
-  box-shadow: 0 -1rem 0.1rem #AAA;
+  padding: $barMargin 0;
   font-size: 0.9375rem;
   background-color: #FA5876;
 }
@@ -98,8 +97,8 @@ $isize: 2rem;
 
 .search-box {
   position: relative;
-  margin: $barMargin 4rem 0 4rem;
-  height: $barHeight - 2 * $barMargin;
+  margin: 0 4rem;
+  height: $barHeight;
   width: calc(100% - 8rem);
   border-radius: 1rem;
   overflow: hidden;

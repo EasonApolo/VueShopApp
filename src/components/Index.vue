@@ -75,7 +75,7 @@ a {
 
 .main-tab {
   position: absolute;
-  top: 4rem;
+  top: 3rem;
   bottom: 0;
   left: 0;
   width: 100%;

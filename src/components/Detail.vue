@@ -131,7 +131,6 @@ $headH: 3rem;
   left: 0;
   width: 100%;
   height: $headH;
-  padding-top: 1rem;
   background-color: #FB5776;
 
   $headTextH: 1.5rem;
@@ -169,7 +168,7 @@ $headH: 3rem;
 
 .dt-body {
   position: absolute;
-  top: 4rem;
+  top: 3rem;
   width: 100%;
   bottom: 0;
   overflow: scroll;
