@@ -5,6 +5,7 @@
       <li class="ol-item"><div class="ol-bg" :style="{backgroundImage: 'url(' +bg2 + ')'}"></div></li>
       <li class="ol-item"><div class="ol-bg" :style="{backgroundImage: 'url(' +bg3 + ')'}"></div></li>
       <li class="ol-item"><div class="ol-bg" :style="{backgroundImage: 'url(' +bg4 + ')'}"></div></li>
+      <li class="ol-item"><div class="ol-bg" :style="{backgroundImage: 'url(' +bg1 + ')'}"></div></li>
     </ul>
   </div>
 </template>
