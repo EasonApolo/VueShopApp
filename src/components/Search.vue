@@ -15,7 +15,7 @@
         <span v-for="(item, index) in history" :key="index" class="keyword" @touchend="searchWith(item)">{{item}}</span>
       </div>
       <div class="search-hot">
-        <h2>搜索发现</h2>
+        <h2>热门推荐</h2>
         <span v-for="(item, index) in recommend" :key="index" class="keyword" @touchend="searchWith(item)">{{item}}</span>
       </div>
     </div>
@@ -153,10 +153,16 @@ export default {
     },
     updateStatusBar: function (isEnter) {
       if (isEnter) {
-        Statusbar.prototype.toDefault()
-        Statusbar.prototype.toWhite()
+        if (navigator.userAgent.indexOf('Android') !== -1) {
+          Statusbar.prototype.toGrey()
+        } else {
+          Statusbar.prototype.toDefault()
+          Statusbar.prototype.toWhite()
+        }
       } else {
-        Statusbar.prototype.toLight()
+        if (navigator.userAgent.indexOf('Android') === -1) {
+          Statusbar.prototype.toLight()
+        }
         Statusbar.prototype.toMain()
       }
     }

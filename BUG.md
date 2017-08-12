@@ -1,3 +1,10 @@
+8.12
+
+> 1. [重要]在同学机子上vue-awesome-swiper没有css，经比较发现是swiper版本不同，2.5可用。
+> 2. [重要]某些情况下Tween里的this可能会失效，导致获取不到tween的参数。调整了写法。
+> 3. [重要]cordova-plugin-statusbar的更改字体为黑色的API只支持ios。因此对安卓的白色顶栏用灰色代替。
+4. [优化]登录界面的弹出动画还是有点问题。
+
 8.6
 
 > 1. [重要]在从别的路由跳转回index时应该恢复index中每个page的scrollTop。 //  其实由于keep-alive，data并不会重置，只要把滚动高度存下来（scrolls.pageScroll），在index的routeEnter钩子中emit初始化事件，再在tab中监听并把高度恢复即可。且现在为每一个page都增加了id（'p' + this.cpntId + index），很容易查找。

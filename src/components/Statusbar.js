@@ -14,10 +14,20 @@ Statusbar.prototype = {
       StatusBar.backgroundColorByHexString('#FFFFFF')
     }
   },
+  toGrey: function () {
+    /* eslint-disable no-undef */
+    if (typeof window.sb !== 'undefined') {
+      StatusBar.backgroundColorByHexString('#AAAAAA')
+    }
+  },
   toDefault: function () {
     /* eslint-disable no-undef */
     if (typeof window.sb !== 'undefined') {
-      StatusBar.styleDefault()
+      if (navigator.userAgent.indexOf('Android') !== -1) {
+        StatusBar.backgroundColorByHexString('#AAA')
+      } else {
+        StatusBar.styleDefault()
+      }
     }
   },
   toLight: function () {

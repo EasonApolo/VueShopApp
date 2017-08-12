@@ -289,10 +289,11 @@ export default {
           toScroll = left
         }
         var TWEEN = require('@tweenjs/tween.js')
-        var tween = new TWEEN.Tween({x: scroll, y: tb.parentNode})
+        var coords = { x: scroll, y: tb.parentNode }
+        var tween = new TWEEN.Tween(coords)
           .to({x: toScroll}, 300)
-          .onUpdate(function () {
-            this.y.scrollLeft = this.x
+          .onUpdate(() => {
+            coords.y.scrollLeft = coords.x
           })
         tween.start()
         requestAnimationFrame(animate)

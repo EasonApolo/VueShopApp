@@ -44,6 +44,9 @@ export default {
     },
     pushToMyData: function () {
       this.$router.push({name: 'mydata'})
+    },
+    pushToLogin: function () {
+      this.$router.push({name: 'login'})
     }
   },
   mounted () {
@@ -55,6 +58,7 @@ export default {
     this.$root.eventHub.$on('pushToSetting', this.pushToSetting)
     this.$root.eventHub.$on('pushToBuyRecords', this.pushToBuyRecords)
     this.$root.eventHub.$on('pushToMyData', this.pushToMyData)
+    this.$root.eventHub.$on('pushToLogin', this.pushToLogin)
   }
 }
 </script>

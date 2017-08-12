@@ -59,6 +59,11 @@ export default new Router({
       path: '/mydata',
       name: 'mydata',
       component: resolve => require(['@/components/Mydata.vue'], resolve)
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: resolve => require(['@/components/Login.vue'], resolve)
     }
   ]
 })
