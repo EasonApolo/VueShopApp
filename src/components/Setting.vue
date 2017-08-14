@@ -4,6 +4,9 @@
       <div id="back" @click="back"></div>
       <div id="text">设置</div>
     </div>
+    <div class="part">
+      <div class="signout" @click="signOut" :class="{disabled: !loginOk}">退出当前账号</div>
+    </div>
   </div>
 </template>
 
@@ -11,7 +14,7 @@
 
 export default {
   name: 'setting',
-  props: [],
+  props: ['loginOk'],
   components: {
   },
   data () {
@@ -21,9 +24,16 @@ export default {
   },
   methods: {
     back: function () {
-      window.history.back(-1)
+      this.$root.eventHub.$emit('closeSetting')
     },
     fetchData: function () {
+    },
+    signOut: function () {
+      if (localStorage.userInfo !== undefined && localStorage.userInfo !== null) {
+        delete localStorage.userInfo
+        this.$root.eventHub.$emit('updateUserInfo')
+        this.$root.eventHub.$emit('closeSetting')
+      }
     }
   },
   mounted () {
@@ -58,9 +68,14 @@ a {
   color: #42b983;
 }
 .setting {
-    position: relative;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
     height: 100%;
-    background-color: white;
+    background-color: #F4F4F4;
     text-align: left;
     z-index: 1;
 }
@@ -87,5 +102,26 @@ a {
     font-size:1.2rem;
     color: #FFFFFF;
     text-align: center;
+}
+
+.part {
+  margin-bottom: .5rem;
+  background-color: white;
+
+  .row {
+    line-height: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .signout {
+    height: 2.75rem;
+    line-height: 2.875rem;
+    color: #FA5876;
+    text-align: center;
+  }
+
+  .disabled {
+    color: #AAA;
+  }
 }
 </style>

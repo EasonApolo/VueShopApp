@@ -9,13 +9,13 @@
       <div class="main" v-show="show === 0">
         <form class="login-wrapper">
           <div class="login-input li-user">
-            <input type="text" data-valid="none" placeholder="请输入用户名/手机号" />
+            <input type="text" data-valid="none" placeholder="请输入用户名/手机号" v-model="signinPhone"/>
           </div>
           <div class="login-input li-pass">
-            <input type="password" date-valid="none" placeholder="请输入密码" />
+            <input type="password" date-valid="none" placeholder="请输入密码" v-model="signinPassword"/>
             <div class="forget-password"></div>
           </div>
-          <button id="login-submit" type="submit">登&nbsp;&nbsp;录</button>
+          <button id="login-submit" type="submit" @click="signin">登&nbsp;&nbsp;录</button>
         </form>
         <div class="register">
           <div class="re-1" @click="show = 1">手机快速注册</div>
@@ -47,7 +47,7 @@
       <div class="main" v-show="show === 1">
         <form class="login-wrapper">
           <div class="login-input li-user">
-            <input type="text" data-valid="none" placeholder="请输入手机号" />
+            <input type="text" data-valid="none" placeholder="请输入手机号" v-model="signupPhone"/>
             <div class="get-captcha" v-show="!captchaSent" @click="getCaptcha">获取验证码</div>
             <div class="get-captcha" v-show="captchaSent">{{curCaptchaCool}}s后重发</div>
           </div>
@@ -55,9 +55,9 @@
             <input date-valid="none" placeholder="请输入短信中的验证码" />
           </div>
           <div class="login-input li-pass">
-            <input type="password" date-valid="none" placeholder="请输入密码(6-16字符)" />
+            <input type="password" date-valid="none" placeholder="请输入密码(6-16字符)" v-model="signupPassword" />
           </div>
-          <button id="login-submit" type="submit">注&nbsp;&nbsp;册</button>
+          <button id="login-submit" type="submit" @click="signup">注&nbsp;&nbsp;册</button>
         </form>
         <div class="register">
           <div class="re-1" @click="show = 0">已注册？前往登录</div>
@@ -101,7 +101,12 @@ export default {
       show: 0,
       captchaSent: false,
       getCaptchaCool: 30,
-      curCaptchaCool: 0
+      curCaptchaCool: 0,
+      signinPhone: '',
+      signinPassword: '',
+      signupPhone: '',
+      signupPassword: '',
+      submitDisabled: false
     }
   },
   computed: {
@@ -120,6 +125,64 @@ export default {
           this.captchaSent = false
         }
       }, 1000)
+    },
+    signup: function () {
+      if (this.submitDisabled) return
+      this.submitDisabled = true
+      setTimeout(() => {
+        this.submitDisabled = false
+      }, 3000)
+      let formData = new FormData()
+      formData.append('phone', this.signupPhone)
+      formData.append('password', this.signupPassword)
+      fetch('http://forvera.me/signup.php', {
+        method: 'POST',
+        headers: {},
+        body: formData
+      }).then((response) => {
+        if (response.ok) {
+          return response.json()
+        }
+      }).then((json) => {
+        if (json.status === 'ok') {
+          localStorage.userInfo = JSON.stringify(json)
+          this.$root.eventHub.$emit('pushToProfile', json)
+        } else if (json.status.indexOf('Duplicate') !== -1) {
+          this.$root.eventHub.$emit('showNotification', '手机号已绑定')
+        }
+      }).catch((error) => {
+        console.error(error)
+      })
+    },
+    signin: function () {
+      if (this.submitDisabled) return
+      this.submitDisabled = true
+      setTimeout(() => {
+        this.submitDisabled = false
+      }, 3000)
+      let formData = new FormData()
+      formData.append('phone', this.signinPhone)
+      formData.append('password', this.signinPassword)
+      fetch('http://forvera.me/signin.php', {
+        method: 'POST',
+        headers: {},
+        body: formData
+      }).then((response) => {
+        if (response.ok) {
+          return response.json()
+        }
+      }).then((json) => {
+        if (json.status === 'ok') {
+          localStorage.userInfo = JSON.stringify(json)
+          this.$root.eventHub.$emit('pushToProfile', json)
+        } else if (json.status.indexOf('Bad password') !== -1) {
+          this.$root.eventHub.$emit('showNotification', '密码错误')
+        } else if (json.status.indexOf('Phone not signup') !== -1) {
+          this.$root.eventHub.$emit('showNotification', '手机号尚未注册')
+        }
+      }).catch((error) => {
+        console.error(error)
+      })
     }
   }
 }

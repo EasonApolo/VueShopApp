@@ -90,13 +90,13 @@ a {
 .mydata {
   position: relative;
   height: 100%;
-  background-color: white;
+  background-color: #F4F4F4;
   text-align: left;
   z-index: 1;
 }
 .top{
   position: relative;
-  background-color:#FA5876;
+  background-color: #FA5876;
   height: 3rem;
 }
 #back{
@@ -118,16 +118,15 @@ a {
   color: #FFFFFF;
   text-align: center;
 }
-.white{
-  width: 100%;
-  height: 15px;
-  background-color: #e0e0e0;
+.part {
+  margin-bottom: 0.5rem;
+  background-color: white;
 }
 .head{
   position: relative;
   width: 100%;
   height:55px;
-  border: 1px solid #ededed;
+  border-bottom: 1px solid #F8F8F8;
 }
 .t{
   position: absolute;

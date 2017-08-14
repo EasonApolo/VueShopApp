@@ -1,9 +1,12 @@
 <template>
   <div class="profile">
     <!--顶部栏-->
+    <transition name="slide-left">
+      <setting v-show="settingShow" :loginOk="loginOk"></setting>
+    </transition>
     <div class="user_center">
         <span id="user">个人中心</span>
-        <div class="setting" @click="linkTo('st')"></div>
+        <div class="setting-entry" @click="showSetting"></div>
     </div>
 
     <!--登陆栏-->
@@ -47,35 +50,21 @@
       <!--消息提示栏-->
       <div class="message-box">
           <div class="row">
-              <div id="bt1" @click="show = 0" :class="{active: show === 0}">
-                  <div class="title">系统消息</div>
-              </div>
-              <div id="bt2" @click="show = 1" :class="{active: show === 1}">
-                  <div class="title">我的消息</div>
-              </div>
-              <div id="bt3" @click="show = 2" :class="{active: show === 2}">
-                  <div class="title">收到的评论</div>
-              </div>
-              <div id="bt4" @click="show = 3" :class="{active: show === 3}">
-                  <div class="title">发出的评论</div>
-              </div>
+            <div v-for="(item, index) in messageBut" :key="item" class="tab-but" :class="{active: show === index}" @click="show = index">
+              <div class="title">{{ item }}</div>
+            </div>
           </div>
       </div>
       <div class="message">
-        <div v-show="show === 0" id="tab1">
-            此处显示系统消息
-        </div>
-        <div v-show="show === 1" id="tab2">
-            此处显示我的消息
-        </div>
-        <div v-show="show === 2" id="tab3">
-            此处显示我收到的评论
-        </div>
-        <div v-show="show === 3" id="tab4">
-            此处显示我发出的评论
-        </div>
+        <transition name="slide-up" mode="out-in">
+          <div v-bind:key="show" class="tab">
+            {{ message }}
+          </div>
+        </transition>
       </div>
+
     </div>
+
     <div id="light" class="white_content" :class="{lightShow: lightShow}">
       <div class="wodetj">
         <div id="content1">我的推荐:</div>
@@ -91,10 +80,12 @@
       </div>
       <div id="close" @click="lightShow = false"><img width="60px" height="80px" :src="backSrc2"> </div>
     </div>
+
   </div>
 </template>
 
 <script>
+import Setting from './Setting'
 
 export default {
   name: 'profile',
@@ -104,6 +95,8 @@ export default {
       settingIcon: require('./assets/设置.png'),
       backSrc: require('./assets/close.png'),
       backSrc2: require('./assets/close 2.png'),
+      messageBut: ['系统消息', '我的消息', '收到的评论', '发出的评论'],
+      settingShow: false,
       show: 0,
       lightShow: false,
       loginOk: false,
@@ -111,10 +104,42 @@ export default {
       userlevel: 2
     }
   },
+  components: {
+    'setting': Setting
+  },
+  computed: {
+    message: function () {
+      switch (this.show) {
+        case 0: return '此处显示系统消息'
+        case 1: return '此处显示我的消息'
+        case 2: return '此处显示我收到的评论'
+        case 3: return '此处显示我发出的评论'
+      }
+    }
+  },
   methods: {
+    updateUserStatus: function () {
+      if (localStorage.userInfo !== undefined && localStorage.userInfo !== null) {
+        let objUser = JSON.parse(localStorage.userInfo)
+        this.loginOk = true
+        this.username = objUser.phone
+        this.userlevel = objUser.point
+      } else {
+        this.loginOk = false
+      }
+      // let objUser = this.$route.query.objUser
+      // if (objUser.status === 'ok') {
+      // }
+    },
+    showSetting: function () {
+      this.settingShow = true
+    },
+    closeSetting: function () {
+      this.settingShow = false
+    },
     linkTo: function (tar) {
       let eh = this.$root.eventHub
-      if (!this.loginOK && tar !== 'st') {
+      if (!this.loginOk && tar !== 'st') {
         eh.$emit('pushToLogin')
         return
       }
@@ -142,6 +167,18 @@ export default {
           break
       }
     }
+  },
+  watch: {
+    '$route': 'updateUserStatus'
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.updateUserStatus()
+    })
+  },
+  mounted () {
+    this.$root.eventHub.$on('closeSetting', this.closeSetting)
+    this.$root.eventHub.$on('updateUserInfo', this.updateUserStatus)
   }
 }
 </script>
@@ -165,7 +202,14 @@ a {
   height: 100%;
   text-align: left;
   background-color: #F8F8F8;
-  font-size: 0.875rem;
+  font-size: 1rem;
+}
+
+.slide-left-enter-active, .slide-left-leave-active {
+  transition: transform .2s ease;
+}
+.slide-left-enter, .slide-left-leave-to {
+  transform: translateX(100%);
 }
 
 .user_center{
@@ -182,7 +226,7 @@ a {
     color: #FFFFFF;
     text-align: center;
 }
-.setting{
+.setting-entry {
     $height: 3rem;
     $width: 1.5rem;
     position: absolute;
@@ -271,7 +315,7 @@ a {
     height: 3rem;
     background-color: white;
 }
-.col,#bt1,#bt2,#bt3,#bt4 {
+.col, .tab-but {
     position: relative;
     -webkit-box-flex:1;
     -webkit-flex:1;
@@ -317,12 +361,30 @@ a {
     margin-top: 0.5rem;
 }
 .message{
-    background-color: white;
-    height: 5rem;
+  position: relative;
+  background-color: white;
+  padding: 0 1rem;
+  height: 5rem;
+  overflow: hidden;
+
+  .tab {
+    position: absolute;
+    height: 100%;
+  }
+
+  .slide-up-enter-active, .slide-up-leave-active {
+    transition: transform .3s;
+  }
+
+  .slide-up-leave-to {
+    transform: translateY(-100%);
+  }
+
+  .slide-up-enter {
+    transform: translateY(-100%);
+  }
 }
-#tab1,#tab2,#tab3,#tab3{
-    padding-left: 10px;
-}
+
 .white_content {
     display: none;
     position: absolute;
