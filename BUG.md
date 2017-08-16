@@ -1,3 +1,15 @@
+8.15
+
+>> 1. [重要][Login]第一次登录会没有效果，要重新再登录一次。 // 加了preventDefault
+2. [重要][Notification]notification会先在右边出现。
+>> 3. [重要][MyData]App刚打开，且在登录状态时，点开个人资料保存会没用。// 居然也是因为没加preventDefault，以后这些改装的submit要记得加。
+
+
+8.14
+
+1. [重要]登录注册的时候会有没有返回结果的bug，可能是未处理的php错误。
+
+
 8.12
 
 > 1. [重要]在同学机子上vue-awesome-swiper没有css，经比较发现是swiper版本不同，2.5可用。

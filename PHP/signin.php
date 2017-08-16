@@ -16,7 +16,7 @@ if (mysql_num_rows($result) < 1) {
 	echo $json;
 } else {
     if ($row['password'] == $_POST[password]) {
-        $json = '{"status":"ok","phone":"'.$row['phone'].'","point":"'.$row['point'].'"}';
+        $json = '{"status":"ok","phone":"'.$row['phone'].'","point":"'.$row['point'].'","avatar":"'.$row['avatar'].'","name":"'.$row['username'].'","sex":"'.$row['sex'].'","birthday":"'.$row['birthday'].'"}';
         echo $json;
     } else {
         $json = '{"status":"Bad password"}';

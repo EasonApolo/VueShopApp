@@ -2,7 +2,8 @@
   <div class="browserecords">
     <div id="top">
         <div id="back" @click="back"></div>
-        <div id="text" @click="deleteData">我的浏览</div>
+        <div id="text">我的浏览</div>
+        <div id="clear" @click="deleteData"></div>
     </div>
     <div id="choose">
         <div id="shangpin" @click="show = 0" :class="{active: show === 0}">商品</div>
@@ -154,11 +155,23 @@ a {
 }
 #text{
     position: absolute;
-    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6.4rem;
     line-height: 3rem;
     font-size:1.2rem;
     color: #FFFFFF;
     text-align: center;
+}
+#clear {
+    position: absolute;
+    right: 0.5rem;
+    top: .625rem;
+    background-image: url(./assets/dump2.png);
+    width: 1.75rem;
+    height: 1.75rem;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 #choose{
     position: relative;

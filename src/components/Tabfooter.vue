@@ -33,8 +33,8 @@ export default {
     pushToPayRecords: function () {
       this.$router.push({name: 'pay_records'})
     },
-    pushToPointPage: function () {
-      this.$router.push({name: 'point_page'})
+    pushToPointPage: function (objUser) {
+      this.$router.push({name: 'point_page', query: {objUser: objUser}})
     },
     pushToSetting: function () {
       this.$router.push({name: 'setting'})
@@ -42,8 +42,8 @@ export default {
     pushToBuyRecords: function () {
       this.$router.push({name: 'buy_records'})
     },
-    pushToMyData: function () {
-      this.$router.push({name: 'mydata'})
+    pushToMyData: function (objUser) {
+      this.$router.push({name: 'mydata', query: {objUser: objUser}})
     },
     pushToLogin: function () {
       this.$router.push({name: 'login'})

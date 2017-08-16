@@ -7,11 +7,11 @@
         </div>
     </div>
 
-
     <!--个人积分栏-->
     <div class="mypoint">
-        <div class="user_head"><img id="img" :src="avatar"></div>
-        <div class="user_id">用户ID</div>
+        <div class="user_head"><div id="img" :style="{backgroundImage:'url('+user.avatar+')'}"></div></div>
+        <div class="user_id">{{user.name}}</div>
+        <div class="level"><div class="user_level">1</div></div>
     </div>
     <!--我的资产-->
     <div class="myassets">
@@ -49,7 +49,7 @@
     <div class="pointitem">
         <div class="item1">积分兑换</div>
         <div class="item2">兑换记录</div>
-        <div class="item3">。。。。</div>
+        <div class="item3">敬请期待</div>
     </div>
   </div>
 </template>
@@ -63,7 +63,8 @@ export default {
   },
   data () {
     return {
-      avatar: require('./assets/user_center_default_head.png')
+      avatar: require('./assets/user_center_default_head.png'),
+      user: {}
     }
   },
   methods: {
@@ -71,6 +72,7 @@ export default {
       window.history.back(-1)
     },
     fetchData: function () {
+      this.user = JSON.parse(localStorage.userInfo)
     }
   },
   mounted () {
@@ -107,7 +109,7 @@ a {
 .point-page {
     position: relative;
     height: 100%;
-    background-color: white;
+    background-color: #f4f4f4;
     text-align: left;
     z-index: 1;
 }
@@ -121,7 +123,7 @@ a {
     width: 1.5rem;
     height: 1.5rem;
     left: 1rem;
-    top: 1.5rem;
+    top: 0.95rem;
     z-index: 1;
     background-image: url(./assets/back.png);
     background-size: contain;
@@ -129,7 +131,7 @@ a {
 }
 #point{
     position: absolute;
-    padding-top: 20px;
+    top:0.7rem;
     width: 100%;
     line-height: 2rem;
     font-size:1.2rem;
@@ -139,6 +141,7 @@ a {
 .mypoint{
     position: relative;
     height:60px;
+    background-color: #FFFFFF;
 }
 .user_head {
     position: absolute;
@@ -146,14 +149,17 @@ a {
     top: -20px;
     width: 70px;
     height:70px;
-    border: 1px solid #e0e0e0;
-    padding: 1px;
+    padding: 2px;
     background: #fff;
     border-radius: 50%;
-}
-#img{
-    width:100%;
-    border-radius: 50%;
+    
+    #img{
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
 }
 
 .mypoint{
@@ -163,24 +169,58 @@ a {
 }
 .user_id{
     position:absolute;
-    padding-top: 35px;
+    padding-top:5px;
     padding-left: 100px;
     display: inline;
+}
+.level{
+  position: absolute;
+  top:25px;
+  padding-left: 100px;
+  display: inline;
+}
+.user_level {
+  margin-top: 3px;
+  position: relative;
+  padding-left: 1.5rem;
+  line-height: 1rem;
+  font-size: 0.875rem;
+  width: 1rem;
+  background-color: #FD8298;
+  border-radius: .5rem;
+  color: white;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 8px;
+    width: .75rem;
+    height: .75rem;
+    background-image: url(./assets/lv.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
 }
 
 .myassets,.attention{
     position: relative;
-    border:1px solid #e0e0e0;
-    border-radius: 5px;
+    border-top:1px solid #f4f4f4;
+    background-color: #FFFFFF;
     height:80px;
+    margin-top: 10px;
 }
+.attention{
+    border-bottom: 1px solid #f4f4f4;
+}
+
 .item{
     position: absolute;
     padding-top:10px;
     width: 100%;
     height:30px;
     text-align: center;
-    border-bottom: 1px dashed #e0e0e0;
+    border-bottom: 1px solid #f4f4f4;
 }
 .row{
     position:absolute;
@@ -190,12 +230,17 @@ a {
     display: -webkit-flex;
 }
 .col{
-    -webkit-box-flex:1;
-    -webkit-flex:1;
-    flex:1;
-    text-align:center;
-    border-right:1px dashed #e0e0e0;
+  -webkit-box-flex:1;
+  -webkit-flex:1;
+  flex:1;
+  text-align:center;
+  border-right:1px solid #f4f4f4;
 }
+
+.col:last-child {
+  border-right: 0;
+}
+
 .amount{
     font-size: 0.9rem;
     color: #FA5876;
@@ -203,14 +248,14 @@ a {
 
 .pointitem{
     background-color: #fff;
-    margin: 10px;
-    border: 1px solid #d2d2d2;
-    border-radius:5px;
+    margin-top: 10px;
+    border-top: 1px solid #f4f4f4;
+
 }
 .pointitem div {
     height: 50px;
     line-height: 50px;
-    padding-left: 15px;
-    border-bottom: 1px solid #d2d2d2;
+    padding-left: 10px;
+    border-bottom: 1px solid #f4f4f4;
 }
 </style>

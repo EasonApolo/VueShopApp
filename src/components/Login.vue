@@ -15,7 +15,7 @@
             <input type="password" date-valid="none" placeholder="请输入密码" v-model="signinPassword"/>
             <div class="forget-password"></div>
           </div>
-          <button id="login-submit" type="submit" @click="signin">登&nbsp;&nbsp;录</button>
+          <button id="login-submit" type="submit" @click.prevent="signin">登&nbsp;&nbsp;录</button>
         </form>
         <div class="register">
           <div class="re-1" @click="show = 1">手机快速注册</div>
@@ -57,7 +57,7 @@
           <div class="login-input li-pass">
             <input type="password" date-valid="none" placeholder="请输入密码(6-16字符)" v-model="signupPassword" />
           </div>
-          <button id="login-submit" type="submit" @click="signup">注&nbsp;&nbsp;册</button>
+          <button id="login-submit" type="submit" @click.prevent="signup">注&nbsp;&nbsp;册</button>
         </form>
         <div class="register">
           <div class="re-1" @click="show = 0">已注册？前往登录</div>
@@ -155,6 +155,7 @@ export default {
       })
     },
     signin: function () {
+      console.log('signin!')
       if (this.submitDisabled) return
       this.submitDisabled = true
       setTimeout(() => {

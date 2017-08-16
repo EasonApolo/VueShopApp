@@ -4,36 +4,38 @@
       <div id="text">个人资料</div>
       <div id="back" @click="back"></div>
     </div>
-    <div class="part">
-      <div class="white"></div>
-      <div class="head">
+    <form id="form">
+      <div class="part">
+      <div class="head head-avatar">
         <div class="t">头像</div>
-        <div class="user_head"></div>
+        <div class="input-head-wrapper">
+          <div id="input-img" :style="{backgroundImage:'url('+user.avatar+')'}"></div>
+          <input type="file" class="input-head" @click="fileChange($event)"/>
+        </div>
       </div>
       <div class="head">
         <div class="t">昵称</div>
-        <div id="name" @click="setnameshow=true">用户名</div>
+        <input placeholder="在此输入昵称" type="text" v-model="user.name">
       </div>
       <div class="head">
         <div class="t">性别</div>
-        <div id="sex">男</div>
+        <select v-model="user.sex">
+          <option value="">空</option>
+          <option value="0">男</option>
+          <option value="1">女</option>
+        </select>
       </div>
       <div class="head">
         <div class="t">生日</div>
-        <div id="birthday">1996-1-1</div>
+        <input type="date" v-model="user.birthday" min="1950-01-01" max="2017-12-31">
       </div>
-    </div>
-
-    <div class="part">
-      <div class="white"></div>
-      <div class="head">
-        <div class="t">修改密码</div>
       </div>
-    </div>
-    <div class="setname" v-show="setnameshow">
-      <div class="content"><div>请输入用户名</div><div>---------</div></div>
-      <div class="close" @click="setnameshow=false">关闭</div>
-    </div>
+      <div class="part">
+      <div class="head head-submit">
+        <input id="submit" type="submit" value="保存" @click.prevent="submit">
+      </div>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -46,7 +48,15 @@ export default {
   },
   data () {
     return {
-      setnameshow: false
+      setnameshow: false,
+      user: {
+        name: '',
+        sex: '',
+        birthday: '',
+        phone: '',
+        avatar: require('./assets/user_center_default_head.png'),
+        hasNewAvatar: false
+      }
     }
   },
   methods: {
@@ -54,9 +64,86 @@ export default {
       window.history.back(-1)
     },
     fetchData: function () {
+      let from = this.$route.query.objUser
+      this.user.name = from.username
+      this.user.phone = from.userphone
+      this.user.avatar = from.avatar
+      this.user.birthday = from.birthday
+      this.user.sex = from.sex
+    },
+    fileChange: function (e) {
+      if (window.imagePicker !== undefined) {
+        e.preventDefault()
+        window.imagePicker.getPictures(
+        results => {
+          if (results[0] !== undefined && results[0] !== '') {
+            this.user.avatar = results[0]
+            this.hasNewAvatar = true
+          }
+        }, error => {
+          console.log('Error: ' + error)
+        }, {
+          maximumImagesCount: 1
+        })
+      }
+    },
+    submit: function () {
+      if (window.imagePicker !== undefined && this.hasNewAvatar) {
+        var options = new window.Fuo()
+        options.fileKey = 'file'
+        options.fileName = this.user.avatar.substr(this.user.avatar.lastIndexOf('/') + 1)
+        var params = {}
+        params.phone = this.user.phone
+        options.params = params
+
+        var ft = new window.Ft()
+        var SERVER = 'http://forvera.me/upload.php'
+        ft.upload(this.user.avatar, encodeURI(SERVER), r => {
+          let server = 'http://forvera.me/modify.php'
+          let formData = new FormData()
+          formData.append('phone', this.user.phone)
+          if (window.imagePicker === undefined) {
+            let input = document.querySelector('input[type="file"]')
+            formData.append('file', input.files[0])
+            server = 'http://forvera.me/modifyAll.php'
+          }
+          formData.append('username', this.user.name)
+          formData.append('sex', this.user.sex)
+          formData.append('birthday', this.user.birthday)
+          fetch(server, {
+            method: 'POST',
+            headers: {},
+            body: formData
+          }).then((response) => {
+            if (response.ok) {
+              return response.json()
+            }
+          }).then((json) => {
+            if (json.status === 'ok') {
+              localStorage.userInfo = JSON.stringify(json)
+              this.$root.eventHub.$emit('showNotification', '修改成功')
+              this.$root.eventHub.$emit('pushToProfile', json)
+            }
+          }).catch((error) => {
+            console.error(error)
+          })
+          console.log('上传成功! Code = ' + r.responseCode)
+        }, error => {
+          alert('上传失败! Code = ' + error.code)
+        }, options)
+      }
     }
   },
   mounted () {
+    let date = new Date()
+    let dstr = '' + date.getFullYear()
+    dstr += '-'
+    let m = (date.getMonth() + 1)
+    dstr += m < 10 ? '0' + m : m
+    dstr += '-'
+    let d = date.getDate()
+    dstr += d < 10 ? '0' + d : d
+    this.user.birthday = dstr
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
@@ -68,25 +155,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-.no-record {
-  width: 100%;
-}
-a {
-  color: #42b983;
-}
 .mydata {
   position: relative;
   height: 100%;
@@ -125,66 +193,78 @@ a {
 .head{
   position: relative;
   width: 100%;
-  height:55px;
+  height: 3rem;
   border-bottom: 1px solid #F8F8F8;
+  line-height: 3rem;
+}
+.head-avatar {
+  height: 4rem;
+  line-height: 4rem;
+}
+#input-img {
+  width: 3rem;
+  height: 3rem;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+input[type=date], input[type=text], select {
+  margin-right: 1rem;
+  padding: 0;
+  height: 100%;
+  float: right;
+  color: #757575;
+  border: 0;
+  outline: none;
+  font-size: .875rem;
+  text-align: right;
+}
+
+select, input[type=date] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 .t{
-  position: absolute;
-  padding-top:15px;
-  left:10px;
+  float: left;
+  margin-left: 1rem;
 }
-.user_head{
-  position: absolute;
-  width: 41px;
-  height: 41px;
-  top:7px;
-  right: 10px;
-  z-index: 1;
+.input-head-wrapper {
+  position: relative;
+  margin-right: 1rem;
+  margin-top: .5rem;
+  width: 3rem;
+  height: 3rem;
+  float: right;
+  color: #757575;
+  font-size: .875rem;
+  text-align: right;
   background-image: url(./assets/user_center_default_head.png);
   background-size: contain;
   background-repeat: no-repeat;
   border-radius: 50%;
+  overflow: hidden;
 }
-#name{
+.input-head{
   position: absolute;
-  padding-top: 15px;
-  right: 10px;
-  color: #bababa;
+  left: 0;
+  top: 0;
+  width: 3rem;
+  height: 3rem;
+  opacity: 0;
 }
-#sex{
-  position: absolute;
-  padding-top: 15px;
-  right: 10px;
-  color: #bababa;
+.head-submit {
+  margin-top: 1.75rem;
+  height: 2.25rem;
 }
-#birthday{
+#submit {
   position: absolute;
-  padding-top: 15px;
-  right: 10px;
-  color: #bababa;
-}
-.setname{
-  position: absolute;
-  top:0px;
-  left:0px;
   width: 100%;
   height: 100%;
-  background-color: white;
-  z-index:1002;
-  overflow: auto;
-  text-align: center;
+  border: 0;
+  padding: 0;
+  background-color: #B8B8B8;
+  font-size: 1rem;
+  color: white;
+  outline: none;
 }
-.content{
-  margin: 0 auto;
-  margin-top: 100px;
-  height:200px;
-  width:75%;
-  border:7px solid #FA5876;
-  border-radius: 7px;
-}
-.close{
-  margin-top: 50px;
-}
-
-
 </style>

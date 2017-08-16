@@ -2,7 +2,7 @@
   <div class="profile">
     <!--顶部栏-->
     <transition name="slide-left">
-      <setting v-show="settingShow" :loginOk="loginOk"></setting>
+      <setting v-show="settingShow" :loginOk="user.loginOk"></setting>
     </transition>
     <div class="user_center">
         <span id="user">个人中心</span>
@@ -11,14 +11,14 @@
 
     <!--登陆栏-->
     <div class="login">
-        <div class="user_head"><img id="img" :src="avatar"></div>
-        <div class="login_box" v-show="!loginOk">
+        <div class="user_head"><div id="img" :style="{backgroundImage:'url('+user.avatar+')'}"></div></div>
+        <div class="login_box" v-show="!user.loginOk">
             <div class="login_prompt1" @click="linkTo('lo')">登录 / 注册</div>
             <div class="login_prompt2">点击登陆享受更多优惠！</div>
         </div>
-        <div class="login_box" v-show="loginOk">
-            <div class="login_prompt1">{{username}}</div>
-            <div class="user_level">{{userlevel}}</div>
+        <div class="login_box" v-show="user.loginOk">
+            <div class="login_prompt1">{{user.username}}</div>
+            <div class="user_level">{{user.userlevel}}</div>
         </div>
     </div>
 
@@ -99,9 +99,15 @@ export default {
       settingShow: false,
       show: 0,
       lightShow: false,
-      loginOk: false,
-      username: '二阶堂天宇',
-      userlevel: 2
+      user: {
+        loginOk: false,
+        username: '二阶堂天宇',
+        userlevel: 2,
+        userphone: '',
+        avatar: require('./assets/user_center_default_head.png'),
+        sex: 0,
+        birthday: ''
+      }
     }
   },
   components: {
@@ -121,15 +127,19 @@ export default {
     updateUserStatus: function () {
       if (localStorage.userInfo !== undefined && localStorage.userInfo !== null) {
         let objUser = JSON.parse(localStorage.userInfo)
-        this.loginOk = true
-        this.username = objUser.phone
-        this.userlevel = objUser.point
+        this.user.loginOk = true
+        this.user.username = objUser.name
+        this.user.userphone = objUser.phone
+        this.user.userlevel = objUser.point
+        if (objUser.avatar !== '') {
+          this.user.avatar = objUser.avatar
+        }
+        this.user.sex = objUser.sex
+        this.user.birthday = objUser.birthday
       } else {
-        this.loginOk = false
+        this.user.loginOk = false
+        this.user.avatar = require('./assets/user_center_default_head.png')
       }
-      // let objUser = this.$route.query.objUser
-      // if (objUser.status === 'ok') {
-      // }
     },
     showSetting: function () {
       this.settingShow = true
@@ -139,7 +149,7 @@ export default {
     },
     linkTo: function (tar) {
       let eh = this.$root.eventHub
-      if (!this.loginOk && tar !== 'st') {
+      if (!this.user.loginOk && tar !== 'st') {
         eh.$emit('pushToLogin')
         return
       }
@@ -154,7 +164,7 @@ export default {
           eh.$emit('pushToLogin')
           break
         case 'pp':
-          eh.$emit('pushToPointPage')
+          eh.$emit('pushToPointPage', this.user)
           break
         case 'pr':
           eh.$emit('pushToPayRecords')
@@ -163,7 +173,7 @@ export default {
           eh.$emit('pushToBuyRecords')
           break
         case 'md':
-          eh.$emit('pushToMyData')
+          eh.$emit('pushToMyData', this.user)
           break
       }
     }
@@ -243,6 +253,7 @@ a {
 .login{
     position: relative;
     background-color: white;
+    height: 50px;
 }
 
 .user_head {
@@ -256,8 +267,11 @@ a {
     border-radius: 50%;
 
     #img{
-        width:100%;
+        width: 100%;
+        height: 100%;
         border-radius: 50%;
+        background-size: cover;
+        background-repeat: no-repeat;
     }
 }
 
