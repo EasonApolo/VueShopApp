@@ -15,7 +15,7 @@
         </div>
         <div class="dt-i-name">{{iprop.name}}</div>
         <div class="dt-i-price">{{iprop.price}}</div>
-        <div class="dt-i-directlybuy">直接购买</div>
+        <div class="dt-i-directlybuy" @click="go">直接购买</div>
       </div>
       <div class="dt-coupon">
         <img class="dt-c-img" :src="couponBg">
@@ -28,7 +28,6 @@
         <div class="r-head">达人推荐</div>
         <advice></advice>
       </div>
-      {{iprop}}
     </div>
   </div>
 </template>
@@ -50,6 +49,28 @@ export default {
     'advice': Advice
   },
   methods: {
+    go: function () {
+      let text = '复制这条信息，打开「手机淘宝」领券下单 ￥mkpa02TWO8q￥'
+      cordova.plugins.clipboard.copy(text);
+      location.href = 'taobao://'
+      setTimeout(function () {
+        alert('超时')
+      }, 250)
+      setTimeout(function () {
+        location.reload()
+      }, 1000)
+      // var ifr = document.createElement('iframe')
+      // ifr.src = 'taobao://'
+      // ifr.style.display = 'none'
+      // document.body.appendChild(ifr)
+      // var openTime = +new Date()
+      // window.setTimeout(function () {
+      //   document.body.removeChild(ifr)
+      //   if ((+new Date()) - openTime > 2500) {
+      //     window.location = ''
+      //   }
+      // }, 2000)
+    },
     goback: function () {
       history.go(-1)
     },

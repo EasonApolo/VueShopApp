@@ -2,6 +2,14 @@
 
 > A Vue.js project
 
+## 项目介绍
+
+这是一个基于Vue、Vue-router的电商移动端H5项目。
+npm run build 的目录即 ../www ，所以请将项目下载到Cordova项目的根目录中。
+
+BUG.md 记录了开发所遇到的各种问题。
+开发过程日志请见 git commit 和 VERSION.md
+
 ## Build Setup
 
 ``` bash

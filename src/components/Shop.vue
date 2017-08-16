@@ -52,7 +52,7 @@ a {
 
 .shop {
   width: 100%;
-  padding: 1px;
+  padding: 0.125rem 0;
   box-sizing: border-box;
   
   .shop-box {

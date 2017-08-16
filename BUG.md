@@ -1,36 +1,50 @@
+8.16
+// 由于项目快要截止，这大概是最后一次bug更新了，增加了几项可以展望的新功能，也把之前的bug都提升过来了。
+1. [重要][Tab]应该要用上inobounce
+2. [重要][Detail]app跳转的逻辑：跳转后应删除剪切板内容、没有安装app的情况、以及要为商品增加淘口令。
+3. [优化][Confirm]确认或取消的弹窗，并不是notification（仅显示消息），可能需要用到promise。
+4. [重要][Listview]数据接口，应该传入参数。
+5. [重要][Profile]功能顺序应该根据实现情况进行调整
+6. [新功能][Detail]收藏功能，比较容易实现。
+7. [新功能][Message]消息功能(系统消息，朋友消息)
+8. [新功能][动态]动态功能
+9. [新功能][换肤]换肤（颜色）功能
+10. [困境][淘口令]淘口令转换应该也是限制次数的。所以讲道理其实是点击跳转时才请求对应商品的淘口令，后台再请求API进行转换并返回。后台其实可以在淘口令上做缓存。但由于后台崩了，所以只能拿假的淘口令来了，淘口令也是一开始就有的，而非点击时由后台实时转换。
+
+
 8.15
 
->> 1. [重要][Login]第一次登录会没有效果，要重新再登录一次。 // 加了preventDefault
+> 1. [重要][Login]第一次登录会没有效果，要重新再登录一次。 // 加了preventDefault
 2. [重要][Notification]notification会先在右边出现。
->> 3. [重要][MyData]App刚打开，且在登录状态时，点开个人资料保存会没用。// 居然也是因为没加preventDefault，以后这些改装的submit要记得加。
+> 3. [重要][MyData]App刚打开，且在登录状态时，点开个人资料保存会没用。// 居然也是因为没加preventDefault，以后这些改装的submit要记得加。
 
 
 8.14
 
-1. [重要]登录注册的时候会有没有返回结果的bug，可能是未处理的php错误。
+> 1. [重要][Login]登录注册的时候会有没有返回结果的bug，可能是未处理的php错误。
 
 
 8.12
 
-> 1. [重要]在同学机子上vue-awesome-swiper没有css，经比较发现是swiper版本不同，2.5可用。
-> 2. [重要]某些情况下Tween里的this可能会失效，导致获取不到tween的参数。调整了写法。
-> 3. [重要]cordova-plugin-statusbar的更改字体为黑色的API只支持ios。因此对安卓的白色顶栏用灰色代替。
-4. [优化]登录界面的弹出动画还是有点问题。
+> 1. [重要][Swiper]在同学机子上vue-awesome-swiper没有css，经比较发现是swiper版本不同，2.5可用。
+> 2. [重要][Tween]某些情况下Tween里的this可能会失效，导致获取不到tween的参数。调整了写法。
+> 3. [重要][状态栏]cordova-plugin-statusbar的更改字体为黑色的API只支持ios。因此对安卓的白色顶栏用灰色代替。
+> 4. [优化][Login]登录界面的弹出动画还是有点问题。
 
 8.6
 
-> 1. [重要]在从别的路由跳转回index时应该恢复index中每个page的scrollTop。 //  其实由于keep-alive，data并不会重置，只要把滚动高度存下来（scrolls.pageScroll），在index的routeEnter钩子中emit初始化事件，再在tab中监听并把高度恢复即可。且现在为每一个page都增加了id（'p' + this.cpntId + index），很容易查找。
+> 1. [重要][Tab]在从别的路由跳转回index时应该恢复index中每个page的scrollTop。 //  其实由于keep-alive，data并不会重置，只要把滚动高度存下来（scrolls.pageScroll），在index的routeEnter钩子中emit初始化事件，再在tab中监听并把高度恢复即可。且现在为每一个page都增加了id（'p' + this.cpntId + index），很容易查找。
 
 
 8.3
 
-1. [重要][Tab]子tab的上下bounce是黑的，切换的时候也会卡一下黑色。
+1. [重要][Tab]子tab的上下bounce是黑的，切换的时候也会卡一下黑色。  // 已提升到8.16.2
 > 2. [重要][Searchbar]点击首页的searchbar会先弹出输入框再跳转。   // input改为div
-3. [重要][Search]搜索结果还没分src。
-4. [重要][Listview]数据传输与组件重用的问题。
-5. [设计][Notification]可能需要一个notification组件。接受选项和内容，触发确认、取消事件。定位在全局。
-6. [重要][Search]结果的src.id要和父tab的相同。
-7. [设计][Search]排序需求。
+> 3. [重要][Search]搜索结果还没分src。    // 8.16解决
+4. [重要][Listview]数据传输与组件重用的问题。  // 已提升到8.16.9
+> 5. [设计][Notification]可能需要一个notification组件。接受选项和内容，触发确认、取消事件。定位在全局。    // 已提升到8.16.8
+> 6. [重要][Search]结果的src.id要和父tab的相同。    // 8.16解决
+> 7. [设计][Search]排序需求。      // 后台不支持，忽略
 > 8. [优化][Tab][7.18.5]tab-indicator在要超出view的时候tab也能自动滑动过去。  // 在Tab里watch了tabIndicator的变化。
 > 9. [重要][路由]Tabfooter来回点的路由记录不应该被存储。而search、detail页面的路由应该被存储。      //router-link增加了replace属性
 

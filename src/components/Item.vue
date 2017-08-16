@@ -53,7 +53,7 @@ a {
 
 .item {
   width: 100%;
-  padding: 0.125rem;
+  padding: 0.125rem 0;
   box-sizing: border-box;
   
   .item-box {

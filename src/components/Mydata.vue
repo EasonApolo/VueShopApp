@@ -32,7 +32,7 @@
       </div>
       <div class="part">
       <div class="head head-submit">
-        <input id="submit" type="submit" value="保存" @click.prevent="submit">
+        <button id="submit" type="submit" @click.prevent="submit">保存</button>
       </div>
       </div>
     </form>

@@ -33,7 +33,9 @@
         </li>
       </ul>
       <div class="afterinput" v-show="done">
-        <listview></listview>
+        <div class="result-list" v-for="(item, index) in src" :key="index" :style="{transform: 'translateX(' + 100 * (index - curSrc) + '%)'}">
+          <listview></listview>
+        </div>
       </div>
     </div>
   </div>
@@ -285,11 +287,9 @@ a {
 .oninput {
   position: absolute;
   left: 0;
-  top: 4rem;
+  top: 2.75rem;
   right: 0;
   bottom: 0;
-  overflow: scroll;
-  -webkit-overflow-scrolling: touch;
 }
 .auto-src {
   position: relative;
@@ -342,6 +342,25 @@ a {
     background-image: url(./assets/automate.png);
     background-size: contain;
     background-repeat: no-repeat;
+  }
+}
+
+.afterinput {
+  position: absolute;
+  left: 0;
+  top: 2rem;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  
+  .result-list {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transition: transform .3s ease;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
   }
 }
 

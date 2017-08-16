@@ -11,7 +11,7 @@
     <div class="mypoint">
         <div class="user_head"><div id="img" :style="{backgroundImage:'url('+user.avatar+')'}"></div></div>
         <div class="user_id">{{user.name}}</div>
-        <div class="level"><div class="user_level">1</div></div>
+        <div class="level"><div class="user_level">{{user.point}}</div></div>
     </div>
     <!--我的资产-->
     <div class="myassets">
@@ -180,7 +180,7 @@ a {
   display: inline;
 }
 .user_level {
-  margin-top: 3px;
+  margin-top: 6px;
   position: relative;
   padding-left: 1.5rem;
   line-height: 1rem;
