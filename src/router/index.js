@@ -64,6 +64,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: resolve => require(['@/components/Login.vue'], resolve)
+    },
+    {
+      path: '/mark_records',
+      name: 'mark_records',
+      component: resolve => require(['@/components/MarkRecords.vue'], resolve)
     }
   ]
 })

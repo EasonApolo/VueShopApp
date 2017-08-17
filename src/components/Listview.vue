@@ -39,7 +39,14 @@ export default {
   methods: {
     scrollBottomChanged: function () {
       if (this.scrollBottom) {
-        fetch('http://forvera.me/getData.php')
+        let formData = new FormData()
+        formData.append('searchInt', '0')
+        formData.append('searchName', 'g')
+        fetch('http://10.0.0.3:8081/Eshop/productjson', {
+          method: 'POST',
+          headers: {},
+          body: formData
+        })
         .then(response => {
           return response.json()
           .then(json => {

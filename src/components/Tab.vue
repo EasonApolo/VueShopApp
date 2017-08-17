@@ -42,12 +42,12 @@
       </div>
     </transition>
     <div class="content" :style="{width: contentWidth, transform: contentTransform}" :class="{trans:untouching}">
-      <div class="page" v-for="(item, index) in choosenTabs" :key="index" :style="{width: pageWidth}" :class="{scrollable:scrollable, childrenPage:id[1] === '2', parentPage: id[1] === '1'}"
+      <div class="page" v-for="(item, index) in choosenTabs" :key="index" :style="{width: pageWidth}" :class="{childrenPage:id[1] === '2', parentPage: id[1] === '1'}"
         @touchstart="touchstart($event)"
         @touchmove="touchmove($event)"
         @touchend="touchend($event)"
         :id="'p'+cpntId+index">
-        <div class="pagewrapper" :is="item.component" :cpntId="item.cpntId" :sonScrollable="scrolls[index].sonScrollable" :sonScrollTop="scrolls[index].sonScrollTop" :msg="item.msg" :scrollBottom="scrolls[index].scrollBottom"></div>
+        <div class="page-wrapper" :class="{heightSized:!scrollable}" :is="item.component" :cpntId="item.cpntId" :sonScrollable="scrolls[index].sonScrollable" :sonScrollTop="scrolls[index].sonScrollTop" :msg="item.msg" :scrollBottom="scrolls[index].scrollBottom"></div>
       </div>
     </div>
   </div>
@@ -533,11 +533,6 @@ $tabbarHeight: 2rem;
     transition: 0.3s;
   }
 
-  .scrollable {
-    overflow-y: scroll !important;
-    -webkit-overflow-scrolling: touch;
-  }
-
   .slide-fade-enter-active {
     transition: all .2s ease;
   }
@@ -562,12 +557,18 @@ $tabbarHeight: 2rem;
       width: 50%;
       height: 100%;
       vertical-align:top;
-      overflow: hidden;
       background-color: #EEEEEE;
       transition: 1s;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
 
-      .pageWrapper {
-        position: relative;
+      .page-wrapper {
+        overflow: hidden;
+      }
+
+      .heightSized {
+        height: 100%;
       }
     }
   }

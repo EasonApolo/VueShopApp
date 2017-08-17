@@ -26,11 +26,13 @@ export default {
   },
   methods: {
     showNotification: function (info, time = 3000) {
-      this.notiShow = true
-      this.notiInfo = info
-      setTimeout(() => {
-        this.notiShow = false
-      }, time)
+      if (!this.notiShow) {
+        this.notiShow = true
+        this.notiInfo = info
+        setTimeout(() => {
+          this.notiShow = false
+        }, time)
+      }
     }
   },
   mounted () {
@@ -87,6 +89,7 @@ a, img, button, input, textarea, div, li {
   opacity: 0.5;
   color: white;
   z-index: 999;
+  border-radius: 0.5rem;
 }
 
 .shake-in-enter-active {

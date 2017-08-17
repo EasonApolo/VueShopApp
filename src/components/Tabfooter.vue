@@ -50,6 +50,9 @@ export default {
     },
     pushToProfile: function (objUser) {
       this.$router.push({name: 'profile', query: {objUser: objUser}})
+    },
+    pushToMarkRecords: function () {
+      this.$router.push({name: 'mark_records'})
     }
   },
   mounted () {
@@ -63,6 +66,7 @@ export default {
     this.$root.eventHub.$on('pushToMyData', this.pushToMyData)
     this.$root.eventHub.$on('pushToLogin', this.pushToLogin)
     this.$root.eventHub.$on('pushToProfile', this.pushToProfile)
+    this.$root.eventHub.$on('pushToMarkRecords', this.pushToMarkRecords)
   }
 }
 </script>

@@ -41,6 +41,7 @@
       <!--几个选项-->
       <div class="useritem">
           <div class="item" @click="linkTo('bur')"><span class="text">购买记录</span></div>
+          <div class="item" @click="linkTo('mr')"><span class="text">我的收藏</span></div>
           <div class="item" @click="linkTo('pp')"><span class="text">积分管理</span> </div>
           <div class="item" @click="linkTo('pr')"><span class="text">支付管理</span></div>
           <div class="item" @click="linkTo('md')"><span class="text">个人资料</span></div>
@@ -171,6 +172,9 @@ export default {
           break
         case 'bur':
           eh.$emit('pushToBuyRecords')
+          break
+        case 'mr':
+          eh.$emit('pushToMarkRecords')
           break
         case 'md':
           eh.$emit('pushToMyData', this.user)

@@ -95,18 +95,12 @@ export default {
         var params = {}
         params.phone = this.user.phone
         options.params = params
-
         var ft = new window.Ft()
         var SERVER = 'http://forvera.me/upload.php'
         ft.upload(this.user.avatar, encodeURI(SERVER), r => {
           let server = 'http://forvera.me/modify.php'
           let formData = new FormData()
           formData.append('phone', this.user.phone)
-          if (window.imagePicker === undefined) {
-            let input = document.querySelector('input[type="file"]')
-            formData.append('file', input.files[0])
-            server = 'http://forvera.me/modifyAll.php'
-          }
           formData.append('username', this.user.name)
           formData.append('sex', this.user.sex)
           formData.append('birthday', this.user.birthday)
@@ -131,6 +125,32 @@ export default {
         }, error => {
           alert('上传失败! Code = ' + error.code)
         }, options)
+      } else if (window.imagePicker !== undefined && !this.hasNewAvatar) {
+        let server = 'http://forvera.me/modify.php'
+        let formData = new FormData()
+        formData.append('phone', this.user.phone)
+        formData.append('username', this.user.name)
+        formData.append('sex', this.user.sex)
+        formData.append('birthday', this.user.birthday)
+        fetch(server, {
+          method: 'POST',
+          headers: {},
+          body: formData
+        }).then((response) => {
+          if (response.ok) {
+            return response.json()
+          }
+        }).then((json) => {
+          if (json.status === 'ok') {
+            localStorage.userInfo = JSON.stringify(json)
+            this.$root.eventHub.$emit('showNotification', '修改成功')
+            this.$root.eventHub.$emit('pushToProfile', json)
+          }
+        }).catch((error) => {
+          console.error(error)
+        })
+      } else if (window.imagePicker === undefined) {
+        this.$root.eventHub.$emit('showNotification', '啊哦~您的设备上不支持修改个人信息（￣ε￣*）')
       }
     }
   },

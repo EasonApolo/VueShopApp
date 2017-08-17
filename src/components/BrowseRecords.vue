@@ -208,7 +208,6 @@ a {
     width: 100%;
     top: 5rem;
     bottom: 0px;
-    overflow: scroll;
     background-color: #F0F0F0;
 }
 #goods{
@@ -216,7 +215,8 @@ a {
     width: 100%;
     top: 0;
     bottom: 0;
-    background-color: white;
+    background-color: #F0F0F0;
+    overflow: scroll;
     z-index: 1;
 }
 .goods_records {
@@ -224,6 +224,7 @@ a {
     width: 100%;
     height: 128px;
     border-bottom: 1px #eee solid;
+    background-color: white;
 }
 .img_goods{
     position: absolute;

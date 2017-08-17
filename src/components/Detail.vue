@@ -3,7 +3,7 @@
     <div class="dt-head">
       <div class="dt-h-back" @click="goback"></div>
       <span class="dt-h-title">优惠商品</span>
-      <div class="dt-h-search"></div>
+      <div class="dt-h-mark" @click="mark" :class="{markFull: marked}"></div>
     </div>
     <div class="dt-body">
       <div class="dt-item">
@@ -42,23 +42,52 @@ export default {
       iprop: this.$route.query.iprop,
       couponBg: require('./assets/Coupon.png'),
       watermark: '专',
-      imgLoaded: false
+      imgLoaded: false,
+      marked: false
     }
   },
   components: {
     'advice': Advice
   },
   methods: {
+    mark: function () {
+      this.marked = !this.marked
+      if (this.marked) {
+        if (localStorage.mark === undefined || localStorage.mark === '') {
+          localStorage.mark = '[]'
+        }
+        let markAll = JSON.parse(localStorage.mark)
+        markAll.push(this.iprop)
+        localStorage.mark = JSON.stringify(markAll)
+        this.$root.eventHub.$emit('showNotification', '已收藏(๑•ㅂ•́)و✧')
+      } else {
+        new Promise((resolve, reject) => {
+          let markedAll = JSON.parse(localStorage.mark)
+          for (let i = 0; i < markedAll.length; i++) {
+            if (markedAll[i].name === this.iprop.name) {
+              markedAll.splice(i, 1)
+              localStorage.mark = JSON.stringify(markedAll)
+              resolve(localStorage.mark)
+              break
+            }
+          }
+        }).then(mark => {
+          console.log(mark)
+        })
+      }
+    },
     go: function () {
       let text = '复制这条信息，打开「手机淘宝」领券下单 ￥mkpa02TWO8q￥'
-      cordova.plugins.clipboard.copy(text);
-      location.href = 'taobao://'
-      setTimeout(function () {
-        alert('超时')
-      }, 250)
-      setTimeout(function () {
-        location.reload()
-      }, 1000)
+      if (window.co !== undefined) {
+        window.co.plugins.clipboard.copy(text)
+        location.href = 'taobao://'
+        setTimeout(function () {
+          alert('超时')
+        }, 250)
+        setTimeout(function () {
+          location.reload()
+        }, 1000)
+      }
       // var ifr = document.createElement('iframe')
       // ifr.src = 'taobao://'
       // ifr.style.display = 'none'
@@ -103,6 +132,16 @@ export default {
         thisbh.unshift(this.iprop)
       }
       localStorage.browseHistory = JSON.stringify(thisbh)
+    },
+    initMark: function () {
+      if (localStorage.mark !== undefined && localStorage !== '') {
+        let markAll = JSON.parse(localStorage.mark)
+        for (let i = 0; i < markAll.length; i++) {
+          if (markAll[i].name === this.iprop.name) {
+            this.marked = true
+          }
+        }
+      }
     }
   },
   watch: {
@@ -110,6 +149,15 @@ export default {
   },
   mounted () {
     this.addBrowseHistory()
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.initMark()
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    this.marked = false
+    next()
   }
 }
 </script>
@@ -176,14 +224,18 @@ $headH: 3rem;
     font-size: 1.1rem;
   }
 
-  .dt-h-search {
+  .dt-h-mark {
     float: right;
     margin-right: 0.5rem;
     width: 1.5rem;
     height: $headTextH;
-    background-image: url(./assets/searchWhite.png);
+    background-image: url(./assets/mark-empty.png);
     background-size: contain;
     background-repeat: no-repeat;
+  }
+
+  .markFull {
+    background-image: url(./assets/mark-full.png);
   }
 }
 
