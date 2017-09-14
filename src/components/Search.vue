@@ -34,7 +34,7 @@
       </ul>
       <div class="afterinput" v-show="done">
         <div class="result-list" v-for="(item, index) in src" :key="index" :style="{transform: 'translateX(' + 100 * (index - curSrc) + '%)'}">
-          <listview></listview>
+          <listview :msg="keyword"></listview>
         </div>
       </div>
     </div>

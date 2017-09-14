@@ -3,7 +3,7 @@
     <div id="top">
         <div id="back" @click="back"></div>
         <div id="text">我的收藏</div>
-        <div id="clear" @click="manage"></div>
+        <div id="clear" @click="manage">{{manageWord}}</div>
     </div>
     <div id="content" :class="{inManage: !manageMode}">
         <div id="goods" v-show="show === 0">
@@ -54,6 +54,9 @@ export default {
     },
     submitable: function () {
       return this.selectArray.length !== 0
+    },
+    manageWord: function () {
+      return this.manageMode ? '完成' : '编辑'
     }
   },
   methods: {
@@ -64,7 +67,7 @@ export default {
       this.data = JSON.parse(localStorage.mark)
       this.manageMode = false
       this.selectSet.clear()
-      this.selectAll = []
+      this.selectArray = []
     },
     manage: function () {
       this.manageMode = !this.manageMode
@@ -88,6 +91,7 @@ export default {
       }
     },
     selectAll: function () {
+      console.log('a')
       if (!this.allSelected) {
         for (let i = 0; i < this.data.length; i++) {
           this.selectSet.add(i)
@@ -179,11 +183,13 @@ a {
     position: absolute;
     right: 0.5rem;
     top: .625rem;
-    background-image: url(./assets/dump2.png);
-    width: 1.75rem;
+    width: 2rem;
     height: 1.75rem;
+    line-height: 1.75rem;
+    font-size: .875rem;
     background-size: contain;
     background-repeat: no-repeat;
+    color: white;
 }
 #content{
     position: absolute;
@@ -208,57 +214,32 @@ a {
     width: 100%;
     height: 128px;
     border-bottom: 1px #eee solid;
-
-    .select {
-      position: absolute;
-      left: -2.5rem;
-      top: 0;
-      width: 2.5rem;
-      height: 100%;
-      background-color: #F4F4F4;
-
-      button {
-        padding: 0;
-        position: absolute;
-        left: .625rem;
-        top: calc(50% - .625rem);
-        width: 1.25rem;
-        height: 1.25rem;
-        background-image: url(./assets/select.png);
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-color: white;
-        border-radius: 50%;
-        border: none;
-        outline: none;
-      }
-    }
 }
 
-    .select {
-      position: absolute;
-      left: -2.5rem;
-      top: 0;
-      width: 2.5rem;
-      height: 100%;
-      background-color: #F4F4F4;
+.select {
+  position: absolute;
+  left: -2.5rem;
+  top: 0;
+  width: 2.5rem;
+  height: 100%;
+  background-color: #F4F4F4;
 
-      button {
-        padding: 0;
-        position: absolute;
-        left: .625rem;
-        top: calc(50% - .625rem);
-        width: 1.25rem;
-        height: 1.25rem;
-        background-image: url(./assets/select.png);
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-color: white;
-        border-radius: 50%;
-        border: none;
-        outline: none;
-      }
-    }
+  button {
+    padding: 0;
+    position: absolute;
+    left: .625rem;
+    top: calc(50% - .625rem);
+    width: 1.25rem;
+    height: 1.25rem;
+    background-image: url(./assets/select.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: white;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+  }
+}
 
 .img_goods{
     position: absolute;

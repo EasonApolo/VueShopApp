@@ -47,7 +47,7 @@
         @touchmove="touchmove($event)"
         @touchend="touchend($event)"
         :id="'p'+cpntId+index">
-        <div class="page-wrapper" :class="{heightSized:!scrollable}" :is="item.component" :cpntId="item.cpntId" :sonScrollable="scrolls[index].sonScrollable" :sonScrollTop="scrolls[index].sonScrollTop" :msg="item.msg" :scrollBottom="scrolls[index].scrollBottom"></div>
+        <div class="page-wrapper" :class="{heightSized:!scrollable}" :is="item.component" :cpntId="item.cpntId" :sonScrollable="scrolls[index].sonScrollable" :sonScrollTop="scrolls[index].sonScrollTop" :msg="item.msg" :scrollBottom="scrolls[index].scrollBottom" :key="item.msg"></div>
       </div>
     </div>
   </div>
@@ -141,7 +141,7 @@ export default {
     },
     deleteTab: function (index) {
       if (this.choosenTabs[index].default) return
-      if (index === this.curPage) this.forwardTo(0)
+      this.forwardTo(0)
       this.recommendTabs = this.recommendTabs.concat(this.choosenTabs.splice(index, 1))
       this.scrolls.splice(index, 1)
     },

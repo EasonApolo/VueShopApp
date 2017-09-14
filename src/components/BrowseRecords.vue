@@ -16,21 +16,9 @@
       <div class="goods_records" v-for="(item, index) in data" :key="index">
           <div class="img_goods"><img id="img1" :src="item.imgUrl"></div>
           <div class="goods_name">{{item.name}}</div>
-          <div class="price">￥{{item.price}}</div>
+          <div class="price">{{item.price}}</div>
           <div class="sales">月销：{{item.volume}}</div>
       </div>
-      <!-- <div id="goods_records1">
-          <div class="img_goods"><img id="img1"src="img/goods.jpg"></div>
-          <div class="goods_name">便携手机</div>
-          <div class="price">299￥</div>
-          <div class="sales">月销：666</div>
-      </div>
-      <div id="goods_records2">
-          <div class="img_goods"><img id="img1"src="img/goods1.jpg"></div>
-          <div class="goods_name">夏季短袖四件套</div>
-          <div class="price">59￥</div>
-          <div class="sales">月销：666</div>
-      </div> -->
     </div>
     <div id="shop" v-show="show === 1">
         <div class="shop_records">
@@ -245,12 +233,21 @@ a {
 .price{
     position: absolute;
     left:128px;
-    top:50px;
+    bottom: .5rem;
+    color: #FA5876;
+    font-size: 1.25rem;
+    
+    &:before {
+        content: '￥';
+        font-size: 1rem;
+    }
 }
 .sales{
     position: absolute;
-    left:200px;
-    top:50px;
+    right: .5rem;
+    bottom: .5rem;
+    color: #BBB;
+    font-size: .875rem;
 }
 
 #shop{

@@ -7,7 +7,7 @@
     </div>
     <div class="dt-body">
       <div class="dt-item">
-        <img class="dt-i-img" v-if="imgLoaded" :src="iprop.imgUrl">
+        <img class="dt-i-img" v-show="imgLoaded" :src="iprop.imgUrl" @load="imgLoaded = true">
         <div class="loading" v-if="!imgLoaded">
           <i></i>
           <i></i>

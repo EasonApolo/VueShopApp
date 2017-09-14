@@ -9,6 +9,12 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
+      path: '/',
+      name: 'index',
+      component: resolve => require(['@/components/Index.vue'], resolve),
+      meta: {keepAlive: true}
+    },
+    {
       path: '/index',
       name: 'index',
       component: resolve => require(['@/components/Index.vue'], resolve),

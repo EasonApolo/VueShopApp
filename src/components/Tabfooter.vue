@@ -4,7 +4,7 @@
       <li class="active">
         <router-link to="/index" replace>今日推荐</router-link>
       </li><li>
-        <router-link to="/#" replace>#</router-link>
+        <router-link to="/message" replace>消息</router-link>
       </li><li>
         <router-link to="/profile" replace>个人中心</router-link>
       </li>
@@ -53,9 +53,13 @@ export default {
     },
     pushToMarkRecords: function () {
       this.$router.push({name: 'mark_records'})
+    },
+    pushToIndex: function () {
+      this.$router.push({name: 'index'})
     }
   },
   mounted () {
+    this.$root.eventHub.$on('pushToIndex', this.pushToIndex)
     this.$root.eventHub.$on('pushToSearch', this.pushToSearch)
     this.$root.eventHub.$on('pushToDetail', this.pushToDetail)
     this.$root.eventHub.$on('pushToBrowseRecords', this.pushToBrowseRecords)

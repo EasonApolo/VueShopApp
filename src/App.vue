@@ -36,6 +36,7 @@ export default {
     }
   },
   mounted () {
+    this.$root.eventHub.$emit('pushToIndex')
     this.$root.eventHub.$on('showNotification', this.showNotification)
   }
 }

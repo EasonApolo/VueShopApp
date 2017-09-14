@@ -79,10 +79,13 @@ a {
 
       .item-name {
         color: #444;
+        height: 3rem;
+        overflow: hidden;
       }
       .item-price {
         display: inline-block;
-        margin-top: 0.5rem;
+        margin-top: 0.25rem;
+        line-height: 1.5rem;
         width: 10rem;
         color: #666;
         &:before {
@@ -100,7 +103,7 @@ a {
       .item-discount {
         display: inline-block;
         position: relative;
-        margin-top: 0.5rem;
+        margin-top: 0.25rem;
         line-height: 2rem;
         width: 80%;
         background-color: #FFCA28;
